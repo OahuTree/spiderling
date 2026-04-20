@@ -216,6 +216,7 @@ test/
 config/db_config.json
 config/menu.json
 config/settings.ini
+config/browser_config.json
 .DS_Store
 src/
 metadata.json
