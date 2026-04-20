@@ -1,0 +1,23 @@
+{
+    "chrome_path": "",
+    "user_data_dir": "D:\\chrome_profile",
+    "remote_debugging_port": 9222,
+    "arguments": [
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--remote-allow-origins=*",
+        "--disable-extensions",
+        "--disable-breakpad",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--log-level=3",
+        "--disable-blink-features=AutomationControlled",
+        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    ],
+    "binary_locations": {
+        "windows": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "darwin": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "linux": "/usr/bin/google-chrome"
+    }
+}

@@ -212,6 +212,7 @@ chrome_profile/
 .cache/
 .sqlitedb/
 .idea/
+test/
 .DS_Store
 src/
 metadata.json

@@ -1,0 +1,19 @@
+{
+  "actions": [
+    { "key": "navigate", "i18n_key": "action_navigate", "fields": "url,cache,source_type" },
+    { "key": "click", "i18n_key": "action_click", "fields": "selector,script" },
+    { "key": "scrape_web", "i18n_key": "action_scrape_web", "fields": "selector,attribute,script,variable" },
+    { "key": "parse_html", "i18n_key": "action_parse_html", "fields": "selector,attribute,variable,cache,source_type" },
+    { "key": "parse_url", "i18n_key": "action_parse_url", "fields": "selector,variable,source_type" },
+    { "key": "iterate_file", "i18n_key": "action_iterate_file", "fields": "url,variable,cache,source_type" },
+    { "key": "end_iteration", "i18n_key": "action_end_iteration", "fields": "input,cache,source_type,variable" },
+    { "key": "stage_data", "i18n_key": "action_stage_data", "fields": "variable,cache,stage_type" },
+    { "key": "clear_cache", "i18n_key": "action_clear_cache", "fields": "cache" },
+    { "key": "commit_db", "i18n_key": "action_commit_db", "fields": "cache,variable" },
+    { "key": "jump_to", "i18n_key": "action_jump_to", "fields": "variable,input,cache" },
+    { "key": "reset_flow", "i18n_key": "action_reset_flow", "fields": "" },
+    { "key": "delay", "i18n_key": "action_delay", "fields": "input" },
+    { "key": "input_text", "i18n_key": "action_input_text", "fields": "selector,script,description,input,attribute,variable,wait,cache" },
+    { "key": "remap", "i18n_key": "action_remap", "fields": "remap,variable,cache" }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "databases": [
+    {
+      "name": "Default",
+      "type": "SQLite",
+      "host": "",
+      "port": "",
+      "database": ".sqlitedb/spiderling.db",
+      "username": "",
+      "password": "",
+      "table_name": ""
+    }
+  ],
+  "current_index": 0
+}

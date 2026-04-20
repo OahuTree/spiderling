@@ -1,0 +1,34 @@
+{
+  "menu": [
+    {
+      "label": "文件",
+      "i18n_key": "menu_file",
+      "items": [
+        { "id": "open", "label": "打开工作台", "i18n_key": "open_config", "component": "Dashboard" },
+        { "id": "exit", "label": "退出", "i18n_key": "exit", "component": "Exit" }
+      ]
+    },
+    {
+      "label": "编辑",
+      "i18n_key": "menu_edit",
+      "items": [
+        { "id": "edit_chrome", "label": "编辑Chrome参数", "i18n_key": "edit_chrome_params", "component": "JsonEditor" }
+      ]
+    },
+    {
+      "label": "数据库",
+      "i18n_key": "menu_db",
+      "items": [
+        { "id": "db_config", "label": "数据库配置", "i18n_key": "db_config", "component": "Settings" },
+        { "id": "db_view", "label": "查看数据", "i18n_key": "view_data", "component": "DataView" }
+      ]
+    },
+    {
+      "label": "帮助",
+      "i18n_key": "menu_help",
+      "items": [
+        { "id": "about", "label": "关于", "i18n_key": "about", "component": "Settings" }
+      ]
+    }
+  ]
+}

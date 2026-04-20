@@ -1,0 +1,20 @@
+{
+  "fields": [
+    { "key": "id", "i18n_key": "field_id", "type": "entry", "data_type": "int", "readonly": true },
+    { "key": "name", "i18n_key": "field_name", "type": "entry", "data_type": "string", "required": true },
+    { "key": "action", "i18n_key": "field_action", "type": "combobox", "data_type": "string", "required": true, "options_source": "actions.json" },
+    { "key": "description", "i18n_key": "field_description", "type": "text", "data_type": "string", "rows": 3 },
+    { "key": "selector", "i18n_key": "field_selector", "type": "text", "data_type": "string", "rows": 3 },
+    { "key": "attribute", "i18n_key": "field_attribute", "type": "entry", "data_type": "string" },
+    { "key": "script", "i18n_key": "field_script", "type": "text", "rows": 10 },
+    { "key": "variable", "i18n_key": "field_variable", "type": "entry", "data_type": "string" },
+    { "key": "url", "i18n_key": "field_url", "type": "entry", "data_type": "url" },
+    { "key": "input", "i18n_key": "field_input", "type": "entry", "data_type": "string" },
+    { "key": "wait", "i18n_key": "field_wait", "type": "entry", "data_type": "int", "min": 0, "max": 60, "default": 1},
+    { "key": "timeout", "i18n_key": "field_timeout", "type": "entry", "data_type": "int", "min": 1, "max": 120, "default": 20},
+    { "key": "cache", "i18n_key": "field_cache", "type": "entry", "data_type": "string" },
+    { "key": "source_type", "i18n_key": "field_source_type", "type": "combobox", "data_type": "string", "options_source": "source_type.json" },
+    { "key": "stage_type", "i18n_key": "field_stage_type", "type": "combobox", "data_type": "string", "options_source": "stage_type.json", "width": 150 },
+    { "key": "remap", "i18n_key": "field_remap", "type": "text", "data_type": "string", "rows": 5 }
+  ]
+}
