@@ -252,7 +252,9 @@ class MainWindow(QMainWindow):
                     action.triggered.connect(lambda checked, i=item: self.open_tab(i))
 
         # 添加语言切换菜单
-        lang_menu = menu_bar.addMenu(self.t("menu_language"))
+        # lang_menu = menu_bar.addMenu(self.t("menu_language"))
+        lang_menu = menu_bar.addMenu("language")
+
         for lang in self.languages:
             action = lang_menu.addAction(lang["label"])
             action.triggered.connect(lambda checked, code=lang["code"]: self.change_language(code))

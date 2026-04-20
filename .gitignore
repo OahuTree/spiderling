@@ -215,6 +215,7 @@ chrome_profile/
 test/
 config/db_config.json
 config/menu.json
+config/settings.ini
 .DS_Store
 src/
 metadata.json
