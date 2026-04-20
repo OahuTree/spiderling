@@ -1,0 +1,8 @@
+SQLAlchemy
+pandas
+beautifulsoup4
+selenium
+pd
+openpyxl
+pymysql
+cryptography
