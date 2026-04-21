@@ -1,5 +1,3 @@
-import ctypes
-import platform
 import sys
 import json
 import os
@@ -161,7 +159,7 @@ class MainWindow(QMainWindow):
         # 重新创建菜单栏以刷新翻译
         self.menuBar().clear()
         self.create_menu_bar()
-        # 这里可能还需要刷新当前活动的标签页内容，但为了简单起见，主要刷新菜单
+        # 标签页内容这里没有进行刷新，标签页将在下次启动后切换语言。
         QMessageBox.information(self, self.t("success"), self.t(
             "lang_changed_tip") if "lang_changed_tip" in self.i18n_data else "Language changed. Please restart or refresh tabs if needed.")
 
@@ -200,6 +198,7 @@ class MainWindow(QMainWindow):
         self.tabs.setTabBarAutoHide(False)
         self.tabs.setDocumentMode(False)  # 关闭文档模式以确保左对齐生效
         self.tabs.tabBar().setExpanding(False)  # 标签宽度自适应内容
+        self.tabs.tabBar().setProperty("alignment", Qt.AlignLeft)  # 强制设置对齐属性
         self.tabs.tabBar().setMovable(True)
 
         # 创建顶部角落部件（Logo, 品牌, 版本号）
@@ -253,8 +252,7 @@ class MainWindow(QMainWindow):
 
         # 添加语言切换菜单
         # lang_menu = menu_bar.addMenu(self.t("menu_language"))
-        lang_menu = menu_bar.addMenu("language")
-
+        lang_menu = menu_bar.addMenu("Language")
         for lang in self.languages:
             action = lang_menu.addAction(lang["label"])
             action.triggered.connect(lambda checked, code=lang["code"]: self.change_language(code))
@@ -273,7 +271,6 @@ class MainWindow(QMainWindow):
         msg.setText("Spiderling - Web Scraper")
         info_text = f"Version: v{self.version}\n\n" \
                     "A simple and efficient automated web scraping tool.\n\n" \
-                    "Author: oahutree\n" \
                     "GitHub: https://github.com/OahuTree/spiderling"
         msg.setInformativeText(info_text)
         msg.setStandardButtons(QMessageBox.Ok)
@@ -367,7 +364,7 @@ class MainWindow(QMainWindow):
 
     def create_child_window(self, parent, layout, component_name):
         """
-        根据配置中指定的组件名称动态导入并创建 UI。
+        工厂模式：根据配置中指定的组件名称动态导入并创建 UI。
 
         Args:
             parent (QWidget): 标签页的主容器部件。
@@ -399,8 +396,14 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     # 程序启动入口
     app = QApplication(sys.argv)
-    system = platform.system().lower()
-    if system == "windows":
+
+    # 在 macOS 上强制使用 Fusion 样式，以解决原生主题强制标签居中的问题
+    import platform
+
+    if platform.system() == "Darwin":
+        app.setStyle("Fusion")
+
+    if platform.system() == "windows":
         # 加载程序图标。
         myappid = 'my_unique_app_id_string'
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)

@@ -1,7 +1,7 @@
 import os
 import json
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-                             QPushButton, QTabWidget, QFileDialog, QDialog, 
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
+                             QPushButton, QTabWidget, QFileDialog, QDialog,
                              QLineEdit, QInputDialog, QFrame, QTableWidgetItem,
                              QMessageBox, QStyle)
 from PyQt5.QtCore import Qt
@@ -11,14 +11,15 @@ from services.file_service import FileService
 from services.scrape_service import ScrapeService
 from services.ui_service import UIService
 
+
 def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang="zh"):
     # 获取 UI 设置
     font_settings = UIService.get_font_settings()
-    
+
     # 字体设置
     base_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("font_size", 12))
     btn_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("font_size", 12))
-    
+
     # helper for logging
     def log(msg, color="black"):
         if log_func:
@@ -30,12 +31,13 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     # 注册清理函数，当标签页关闭时停止抓取
     def cleanup():
         scrape_service.stop_scrape()
+
     parent.cleanup = cleanup
 
     fields_path = os.path.join("config", "fields.json")
     fields_data = FileService.load_json(fields_path)
     fields_config = fields_data.get("fields", [])
-    
+
     # 分隔线
     line = QFrame()
     line.setFrameShape(QFrame.HLine)
@@ -59,38 +61,42 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     btn_add_sheet = QPushButton(t("add_sheet"))
     btn_del_sheet = QPushButton(t("del_sheet"))
     btn_save = QPushButton(t("save_steps"))
-    
+
     btn_start = QPushButton(t("start_scrape"))
     btn_stop = QPushButton(t("stop_scrape"))
 
     btn_style = UIService.get_style("button")
-    
+
     # 红色和绿色文字样式的专门定义
     red_text_style = btn_style.replace("color: #1d1d1f;", "color: #ff3b30;")
     green_text_style = btn_style.replace("color: #1d1d1f;", "color: #34c759;")
     black_text_style = btn_style.replace("color: #1d1d1f;", "color: black;")
-    
+
     for btn in [btn_add_step, btn_add_sheet, btn_save]:
         btn.setStyleSheet(btn_style)
         btn.setFont(btn_font)
         toolbar_layout.addWidget(btn)
-        
+
     for btn in [btn_del_step, btn_del_sheet]:
         btn.setStyleSheet(red_text_style)
         btn.setFont(btn_font)
         toolbar_layout.addWidget(btn)
-    
+
     toolbar_layout.addStretch()
     layout.addLayout(toolbar_layout)
 
     sheet_tabs = QTabWidget()
     sheet_tabs.setFont(base_font)
     sheet_tabs.setStyleSheet(UIService.get_style("sheet_tabs"))
+    # 强制设置标签栏属性以支持左对齐和自适应宽度 (解决 Mac 下居中问题)
+    sheet_tabs.tabBar().setExpanding(False)
+    sheet_tabs.tabBar().setProperty("alignment", Qt.AlignLeft)
+    sheet_tabs.setDocumentMode(False)
     layout.addWidget(sheet_tabs)
 
     # Scrape control bar (Moved to bottom)
     scrape_bar = QHBoxLayout()
-    
+
     def get_colored_icon(standard_icon, color_str):
         pixmap = parent.style().standardIcon(standard_icon).pixmap(24, 24)
         painter = QPainter(pixmap)
@@ -103,7 +109,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     btn_start.setFont(btn_font)
     btn_start.setIcon(get_colored_icon(QStyle.SP_MediaPlay, "#34c759"))
     scrape_bar.addWidget(btn_start)
-    
+
     btn_stop.setStyleSheet(black_text_style)
     btn_stop.setFont(btn_font)
     btn_stop.setIcon(get_colored_icon(QStyle.SP_MediaStop, "#ff3b30"))
@@ -126,7 +132,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     btn_clear_logs.setFont(btn_font)
     btn_clear_logs.setIcon(get_colored_icon(QStyle.SP_DialogResetButton, "#5856d6"))
     scrape_bar.addWidget(btn_clear_logs)
-    
+
     scrape_bar.addStretch()
     layout.addLayout(scrape_bar)
 
@@ -136,7 +142,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
         default_path = "scraping_config_example.xlsx"
         # 确保模板存在
         FileService.ensure_excel_template(default_path, fields_config, t)
-        
+
         current_file[0] = default_path
         file_label.setText(f"{t('current_file')}: {os.path.basename(default_path)}")
         log(f"{t('loading_default_config')}: {default_path}")
@@ -152,7 +158,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
 
     def perform_auto_save():
         """ 内部自动保存函数，执行保存但不弹出提示框。 """
-        if not current_file[0]: 
+        if not current_file[0]:
             return
         data = {}
         for i in range(sheet_tabs.count()):
@@ -167,7 +173,8 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
 
     def add_sheet(name=None, rows=None, silent=False):
         if name is None:
-            name, ok = QInputDialog.getText(parent, t("new_sheet"), f"{t('input_sheet_name')}:", QLineEdit.Normal, f"Sheet{sheet_tabs.count() + 1}")
+            name, ok = QInputDialog.getText(parent, t("new_sheet"), f"{t('input_sheet_name')}:", QLineEdit.Normal,
+                                            f"Sheet{sheet_tabs.count() + 1}")
             if not (ok and name): return
 
         table = ExcelTable(fields_config, t, lang=lang)
@@ -178,7 +185,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
                 for c_idx, val in enumerate(row_data):
                     table.setItem(r_idx, c_idx, QTableWidgetItem(str(val) if val is not None else ""))
             table.on_data_structure_changed()
-        
+
         table.cellDoubleClicked.connect(lambda r, c: on_edit_step(table, r))
         sheet_tabs.addTab(table, name)
         sheet_tabs.setCurrentWidget(table)
@@ -190,7 +197,8 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
         双击行时弹出编辑对话框。
         """
         try:
-            row_data = [table.item(row, col).text() if table.item(row, col) else "" for col in range(table.columnCount())]
+            row_data = [table.item(row, col).text() if table.item(row, col) else "" for col in
+                        range(table.columnCount())]
             dialog = StepDialog(parent, fields_config, t, initial_data=row_data, lang=lang)
             dialog.setWindowTitle(t("step_detail"))
             if dialog.exec_() == QDialog.Accepted:
@@ -270,7 +278,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
         """
         try:
             idx = sheet_tabs.currentIndex()
-            if idx != -1: 
+            if idx != -1:
                 name = sheet_tabs.tabText(idx)
                 sheet_tabs.removeTab(idx)
                 perform_auto_save()
@@ -286,7 +294,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
             if not path: return
             current_file[0] = path
             file_label.setText(f"{t('current_file')}: {os.path.basename(path)}")
-        
+
         perform_auto_save()
         QMessageBox.information(parent, t("success"), t("save_success"))
 
@@ -297,7 +305,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
             if not table:
                 log(t("no_active_sheet"), "orange")
                 return
-            
+
             sheet_name = sheet_tabs.tabText(sheet_tabs.currentIndex())
             data = []
             for r in range(table.rowCount()):
@@ -306,11 +314,11 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
                     item = table.item(r, c)
                     row_dict[field["key"]] = item.text() if item else ""
                 data.append(row_dict)
-            
+
             if not data:
                 log(t("no_data_to_scrape"), "orange")
                 return
-                
+
             scrape_service.start_scrape(sheet_name, data)
         except Exception as e:
             log(f"{t('scrape_failed')}: {str(e)}", "red")

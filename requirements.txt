@@ -1,8 +1,13 @@
+PyQt5
 SQLAlchemy
 pandas
+numpy
 beautifulsoup4
 selenium
-pd
+webdriver-manager
 openpyxl
 pymysql
+pymssql
+psycopg2-binary
 cryptography
+lxml
