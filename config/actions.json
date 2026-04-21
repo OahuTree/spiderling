@@ -3,7 +3,7 @@
     { "key": "navigate", "i18n_key": "action_navigate", "fields": "url,cache,source_type" },
     { "key": "click", "i18n_key": "action_click", "fields": "selector,script" },
     { "key": "scrape_web", "i18n_key": "action_scrape_web", "fields": "selector,attribute,script,variable" },
-    { "key": "parse_html", "i18n_key": "action_parse_html", "fields": "selector,attribute,variable,cache,source_type" },
+    { "key": "parse_html", "i18n_key": "action_parse_html", "fields": "selector,attribute,variable,input,cache,source_type" },
     { "key": "parse_url", "i18n_key": "action_parse_url", "fields": "selector,variable,source_type" },
     { "key": "iterate_file", "i18n_key": "action_iterate_file", "fields": "url,variable,cache,source_type" },
     { "key": "end_iteration", "i18n_key": "action_end_iteration", "fields": "input,cache,source_type,variable" },

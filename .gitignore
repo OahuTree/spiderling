@@ -230,3 +230,4 @@ LICENSE
 *.ts
 *.bat
 *.sh
+.gitignore

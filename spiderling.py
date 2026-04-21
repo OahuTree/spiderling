@@ -401,10 +401,10 @@ if __name__ == "__main__":
     # 在 macOS 上强制使用 Fusion 样式，以解决原生主题强制标签居中的问题
     import platform
 
-    if platform.system() == "Darwin":
+    if platform.system().lower() == "darwin":
         app.setStyle("Fusion")
 
-    if platform.system() == "windows":
+    if platform.system().lower() == "windows":
         # 加载程序图标。
         myappid = 'my_unique_app_id_string'
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)

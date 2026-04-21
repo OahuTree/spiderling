@@ -325,7 +325,7 @@ class ScraperActions:
         """
         还原jump_to的跳转点
             使用jump_to步骤后，必须返回的是reset_flow步骤，否则会一直循环。
-            reset_flow函数的作用是结束调整，使整个流程恢复正常。
+            reset_flow函数的作用是结束跳转，使整个流程恢复正常。
         """
         self.log(f"{self.t('executing')}: reset_flow")
         self.next_id = -1
@@ -443,6 +443,23 @@ class ScraperActions:
         _rows = _soup.select(row.get("selector"))
         _vals = [r.get(row.get("attribute")) for r in _rows]
         _df = pd.DataFrame(_vals, columns=[row.get("attribute")])
+        return _df
+
+    def _parse_html_string(self, row, _soup):
+        """根据css selector和attribute读取控件中的属性值"""
+        _selector = row.get("selector")
+        _attribute = row.get("attribute")
+        _input = row.get("input")
+        _element = _soup.select_one(_selector)
+        if _attribute.lower() in ["text", "innertext"]:
+            _val = _element.get_text(strip=True)
+        else:
+            _val = _element.get(_attribute, "")
+
+        if _input:
+            _df = self._create_df(_input, _val)
+        else:
+            _df = self._create_df(_attribute, _val)
         return _df
 
     def _safe_int(self, val, default=0):
