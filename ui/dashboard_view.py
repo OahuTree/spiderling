@@ -17,8 +17,8 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     font_settings = UIService.get_font_settings()
 
     # 字体设置
-    base_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("font_size", 12))
-    btn_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("font_size", 12))
+    base_font = QFont(font_settings.get("font_family"), font_settings.get("font_size"))
+    btn_font = QFont(font_settings.get("font_family"), font_settings.get("btn_font_size"))
 
     # helper for logging
     def log(msg, color="black"):

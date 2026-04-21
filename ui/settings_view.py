@@ -1,10 +1,11 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
-                             QLineEdit, QComboBox, QTextEdit, QFormLayout, 
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
+                             QLineEdit, QComboBox, QTextEdit, QFormLayout,
                              QPushButton, QMessageBox)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from services.db_service import DBService
 from services.ui_service import UIService
+
 
 def create_settings(parent, layout, t):
     # 加载现有配置
@@ -13,11 +14,9 @@ def create_settings(parent, layout, t):
 
     # 字体设置
     font_settings = UIService.get_font_settings()
-    base_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("font_size", 12))
-    
-    title_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("title_font_size", 22), QFont.Bold)
-    
-    mono_font = QFont(font_settings.get("mono_family", "Monospace"), font_settings.get("mono_size", 11))
+    base_font = QFont(font_settings.get("font_family"), font_settings.get("font_size"))
+    title_font = QFont(font_settings.get("font_family"), font_settings.get("title_font_size"), QFont.Bold)
+    mono_font = QFont(font_settings.get("mono_family"), font_settings.get("mono_size"))
 
     title = QLabel(t("db_config"))
     title.setFont(title_font)
@@ -31,7 +30,7 @@ def create_settings(parent, layout, t):
     form_layout.setSpacing(20)
 
     input_style = UIService.get_style("input_field")
-    
+
     config_name_input = QLineEdit(db_config.get("name", "Default"))
     config_name_input.setFont(base_font)
     config_name_input.setStyleSheet(input_style)
@@ -97,8 +96,10 @@ def create_settings(parent, layout, t):
         conn_string_text.setPlainText(conn_str)
 
     for widget in [db_type_combo, host_input, port_input, db_name_input, user_input, pass_input, params_input]:
-        if isinstance(widget, QComboBox): widget.currentTextChanged.connect(update_conn_string)
-        else: widget.textChanged.connect(update_conn_string)
+        if isinstance(widget, QComboBox):
+            widget.currentTextChanged.connect(update_conn_string)
+        else:
+            widget.textChanged.connect(update_conn_string)
     update_conn_string()
 
     btn_layout = QHBoxLayout()
@@ -106,15 +107,15 @@ def create_settings(parent, layout, t):
     btn_test = QPushButton(t("test_conn"))
     btn_ok = QPushButton(t("ok"))
     btn_cancel = QPushButton(t("cancel"))
-    
+
     styled_btn_qss = UIService.get_style("button")
-    
+
     for btn in [btn_test, btn_ok, btn_cancel]:
         btn.setFont(base_font)
         btn.setStyleSheet(styled_btn_qss)
         btn_layout.addWidget(btn)
         btn_layout.addSpacing(10)
-    
+
     btn_layout.addStretch()
     layout.addLayout(btn_layout)
     layout.addStretch()
@@ -125,7 +126,7 @@ def create_settings(parent, layout, t):
         """
         conn_str = conn_string_text.toPlainText()
         table_name = table_input.text()
-        
+
         success, msg = DBService.test_connection(conn_str, table_name)
         if success:
             QMessageBox.information(parent, t("success"), msg)

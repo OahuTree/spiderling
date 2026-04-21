@@ -48,7 +48,7 @@
       "font_size": 12,
       "btn_font_size": 14,
       "title_font_size": 22,
-      "mono_family": "Monospace",
+      "mono_family": "monospace",
       "mono_size": 11,
       "styles": {
         "log_area": "QTextEdit { background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 10px; line-height: 1.5; }",

@@ -221,7 +221,7 @@ class MainWindow(QMainWindow):
         self.log_output.setReadOnly(True)
 
         font_settings = UIService.get_font_settings()
-        self.log_output.setFont(QFont(font_settings.get("mono_family", "Consolas"), font_settings.get("mono_size", 11)))
+        self.log_output.setFont(QFont(font_settings.get("mono_family"), font_settings.get("mono_size")))
         self.log_output.setStyleSheet(UIService.get_style("log_area"))
 
         self.log_dock.setWidget(self.log_output)
@@ -294,7 +294,7 @@ class MainWindow(QMainWindow):
 
             # 重新创建菜单栏以刷新翻译文本
             self.create_menu_bar()
-            # 这里原本应该刷新所有已打开的 Tab 标题，但为了逻辑精炼，提示用户重启生效或重新加载
+            # 标签页内容这里没有进行刷新，标签页将在下次启动后切换语言。
             self.status.showMessage(self.t("ready"))
             QMessageBox.information(self, self.t("success"), self.t("lang_changed_tip"))
         except Exception as e:
