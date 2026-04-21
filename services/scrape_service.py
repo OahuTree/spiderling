@@ -74,7 +74,11 @@ class ScrapeWorker(QObject):
             self.log(self.t("err_chrome_not_found"), "red")
             return False
 
-        user_data_dir = os.path.abspath(self.config.get("user_data_dir", "chrome_profile"))
+        if platform.system() == "windows":
+            user_data_dir = os.path.abspath(self.config.get("user_data_dir", "chrome_profile"))
+        else:
+            user_data_dir = os.path.expanduser(self.config.get("user_data_dir", "chrome_profile"))
+
         args = [
             chrome_path,
             f"--remote-debugging-port={port}",
