@@ -433,7 +433,7 @@ class ScraperActions:
     def _parse_html_table(self, row, _soup):
         """读取table数据"""
         _selector = row.get("selector")
-        table_html = _soup.find(_selector)
+        table_html = _soup.select_one(_selector)
         _df = pd.read_html(StringIO(str(table_html)))[0]
 
         return _df
