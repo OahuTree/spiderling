@@ -168,6 +168,7 @@ class ScrapeWorker(QObject):
 
                 # 动态调用方法
                 if action_type and hasattr(actions_handler, action_type):
+                    # 通过ignore_error标志来判断是否需要忽略错误
                     try:
                         method = getattr(actions_handler, action_type)
                         method(row)
