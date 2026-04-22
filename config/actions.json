@@ -13,7 +13,7 @@
     { "key": "jump_to", "i18n_key": "action_jump_to", "fields": "variable,input,cache" },
     { "key": "reset_flow", "i18n_key": "action_reset_flow", "fields": "" },
     { "key": "delay", "i18n_key": "action_delay", "fields": "input" },
-    { "key": "input_text", "i18n_key": "action_input_text", "fields": "selector,script,description,input,attribute,variable,wait,cache" },
+    { "key": "input_text", "i18n_key": "action_input_text", "fields": "selector,script,description,input,attribute,variable,wait,cache,ignore_error" },
     { "key": "remap", "i18n_key": "action_remap", "fields": "remap,variable,cache,ignore_error" }
   ]
 }

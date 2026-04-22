@@ -116,7 +116,8 @@ class DBService:
         try:
             if not conn_string:
                 conn_string = FileService.get_db_conn_string()
-            if not conn_string: return []
+            if not conn_string:
+                return []
 
             engine = create_engine(conn_string)
             inspector = inspect(engine)

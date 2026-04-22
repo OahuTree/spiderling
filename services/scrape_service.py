@@ -198,6 +198,7 @@ class ScrapeWorker(QObject):
         finally:
             if self.driver:
                 try:
+                    # 由于考虑到抓取的网站可能需要登录，所以程序关闭的时候不再主动关闭webdriver，如果程序抓取出错，请执行清除进程及缓存的按钮进行处理。
                     # self.log("正在关闭 WebDriver 资源...")
                     # self.driver.quit() # 关闭浏览器
                     pass

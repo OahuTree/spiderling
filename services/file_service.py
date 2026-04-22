@@ -290,7 +290,7 @@ class FileService:
                         data = str(old_data) + "\n" + str(data)
 
             os.makedirs(config_path, exist_ok=True)
-            content = ""
+            # content = ""
             # 处理 DataFrame (尝试导入 pandas)
             try:
 

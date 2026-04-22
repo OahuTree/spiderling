@@ -20,7 +20,7 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     base_font = QFont(font_settings.get("font_family"), font_settings.get("font_size"))
     btn_font = QFont(font_settings.get("font_family"), font_settings.get("btn_font_size"))
 
-    # helper for logging
+    # 记录日志
     def log(msg, color="black"):
         if log_func:
             log_func(msg, color)
