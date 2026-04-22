@@ -214,6 +214,8 @@ chrome_profile/
 .idea/
 test/
 config/db_config.json
+config/db_config_local.json
+config/db_config_mssql.json
 config/menu.json
 config/settings.ini
 config/browser_config.json

@@ -3,7 +3,7 @@ import json
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QPushButton, QTabWidget, QFileDialog, QDialog,
                              QLineEdit, QInputDialog, QFrame, QTableWidgetItem,
-                             QMessageBox, QStyle)
+                             QMessageBox, QStyle, QCheckBox)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QIcon, QPixmap, QPainter, QColor
 from ui.common_widgets import ExcelTable, StepDialog
@@ -82,6 +82,12 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
         btn.setFont(btn_font)
         toolbar_layout.addWidget(btn)
 
+    # 禁止拖拽复选框
+    cb_disable_drag = QCheckBox(t("disable_drag"))
+    cb_disable_drag.setFont(base_font)
+    cb_disable_drag.setChecked(True)
+    toolbar_layout.addWidget(cb_disable_drag)
+
     toolbar_layout.addStretch()
     layout.addLayout(toolbar_layout)
 
@@ -136,6 +142,15 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
     scrape_bar.addStretch()
     layout.addLayout(scrape_bar)
 
+    def on_drag_lock_changed(state):
+        enabled = (state == Qt.Unchecked)
+        for i in range(sheet_tabs.count()):
+            table = sheet_tabs.widget(i)
+            if hasattr(table, "_set_drag_enabled"):
+                table._set_drag_enabled(enabled)
+
+    cb_disable_drag.stateChanged.connect(on_drag_lock_changed)
+
     current_file = [None]
 
     def load_initial_file():
@@ -178,6 +193,10 @@ def create_dashboard(parent, layout, t, log_func=None, clear_log_func=None, lang
             if not (ok and name): return
 
         table = ExcelTable(fields_config, t, lang=lang)
+        # 根据当前复选框状态设置拖拽
+        if hasattr(table, "_set_drag_enabled"):
+            table._set_drag_enabled(not cb_disable_drag.isChecked())
+
         table.setFont(base_font)
         if rows:
             for r_idx, row_data in enumerate(rows):

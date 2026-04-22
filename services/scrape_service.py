@@ -7,6 +7,7 @@ import platform
 import threading
 import shutil
 from PyQt5.QtCore import QObject, pyqtSignal
+from psycopg2.errorcodes import RAISE_EXCEPTION
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -159,14 +160,20 @@ class ScrapeWorker(QObject):
                 step_id = row.get("id", f"Step {idx + 1}")
                 action_type = row.get("action", "")
                 wait_time_val = row.get("wait", 0)
+                ignore_error = row.get("ignore_error", False)
+
                 wait_time = float(wait_time_val) if wait_time_val and str(wait_time_val).strip() else 0
 
                 self.log(f"[{idx + 1}/{len(self.data)}] {self.t('executing_step_idx')}: {step_id} ({action_type})")
 
                 # 动态调用方法
                 if action_type and hasattr(actions_handler, action_type):
-                    method = getattr(actions_handler, action_type)
-                    method(row)
+                    try:
+                        method = getattr(actions_handler, action_type)
+                        method(row)
+                    except Exception as e1:
+                        if not ignore_error:
+                            raise e1
                 else:
                     self.log(f"{self.t('unknown_action')}: '{action_type}'", "orange")
 

@@ -5,20 +5,21 @@ import configparser
 import re
 import pandas as pd
 
+
 class FileService:
     """
     统一的文件操作服务类，负责 JSON, Excel, INI 等文件的读取和保存。
     """
-    
+
     @staticmethod
     def load_json(file_path, default_data=None):
         """
         加载 JSON 文件。
-        
+
         Args:
             file_path (str): 文件路径。
             default_data: 文件不存在时返回的默认数据。
-            
+
         Returns:
             dict/list: 解析后的数据。
         """
@@ -35,7 +36,7 @@ class FileService:
     def save_json(file_path, data):
         """
         保存数据到 JSON 文件。
-        
+
         Args:
             file_path (str): 文件路径。
             data: 要保存的数据。
@@ -51,32 +52,32 @@ class FileService:
     def load_excel(file_path, fields_config=None):
         """
         加载 Excel 文件并根据字段配置映射数据。
-        
+
         Args:
             file_path (str): 文件路径。
             fields_config (list): 可选的字段配置，用于映射数据顺序。
-            
+
         Returns:
             dict: 键为 Sheet 名称，值为行数据列表的字典。
         """
         if not os.path.exists(file_path):
             return {}
-            
+
         try:
             wb = openpyxl.load_workbook(file_path, data_only=True)
             data = {}
-            
+
             for sheet_name in wb.sheetnames:
                 sheet = wb[sheet_name]
                 if sheet.max_row < 1:
                     continue
-                    
+
                 # 获取表头
                 excel_headers = [str(cell.value) if cell.value is not None else "" for cell in sheet[1]]
-                
+
                 if fields_config:
                     # 建立映射：key -> excel_column_index
-                    col_map = {} 
+                    col_map = {}
                     for col_idx, header in enumerate(excel_headers):
                         match = re.search(r"\(([^)]+)\)$", header)
                         if match:
@@ -87,7 +88,7 @@ class FileService:
                                 if f.get("key") == header:
                                     col_map[header] = col_idx
                                     break
-                    
+
                     rows = []
                     for row in sheet.iter_rows(min_row=2, values_only=True):
                         if not any(row): continue
@@ -108,7 +109,7 @@ class FileService:
                         if any(row):
                             rows.append(list(row))
                     data[sheet_name] = rows
-            
+
             wb.close()
             return data
         except Exception as e:
@@ -119,7 +120,7 @@ class FileService:
     def save_excel(file_path, data, fields, t=None):
         """
         将数据保存到 Excel 文件。
-        
+
         Args:
             file_path (str): 文件路径。
             data (dict): Sheet 数据。
@@ -130,7 +131,7 @@ class FileService:
             wb = openpyxl.Workbook()
             if wb.active:
                 wb.remove(wb.active)
-                
+
             headers = []
             for f in fields:
                 key = f.get("key")
@@ -140,7 +141,7 @@ class FileService:
                     if i18n_key:
                         label = t(i18n_key)
                 headers.append(f"{label} ({key})")
-            
+
             for sheet_name, rows in data.items():
                 sheet = wb.create_sheet(title=sheet_name)
                 sheet.append(headers)
@@ -148,7 +149,7 @@ class FileService:
                     if len(row) > 0:
                         row[0] = i + 1
                     sheet.append(row)
-                    
+
             wb.save(file_path)
             wb.close()
         except Exception as e:
@@ -191,12 +192,12 @@ class FileService:
         """
         if os.path.exists(file_path):
             return
-            
+
         try:
             wb = openpyxl.Workbook()
             sheet = wb.active
             sheet.title = "ScrapingSteps"
-            
+
             headers = []
             for f in fields:
                 key = f.get("key")
@@ -206,7 +207,7 @@ class FileService:
                     if i18n_key:
                         label = t(i18n_key)
                 headers.append(f"{label} ({key})")
-                
+
             sheet.append(headers)
             wb.save(file_path)
             wb.close()
@@ -238,25 +239,29 @@ class FileService:
         """
         try:
             full_path = os.path.join(config_path, file_name)
-            
+
             # 如果不删除且文件存在，则先尝试读取并合并数据
             if not delete_existing and os.path.exists(full_path):
                 # 根据输入 data 的类型决定如何读取旧数据
                 d_type = "string"
                 is_df = False
                 try:
-                    
+
                     if isinstance(data, pd.DataFrame):
                         d_type = "dataframe"
                         is_df = True
-                    elif isinstance(data, int): d_type = "int"
-                    elif isinstance(data, (list, tuple)): d_type = "list"
+                    elif isinstance(data, int):
+                        d_type = "int"
+                    elif isinstance(data, (list, tuple)):
+                        d_type = "list"
                 except:
-                    if isinstance(data, int): d_type = "int"
-                    elif isinstance(data, (list, tuple)): d_type = "list"
+                    if isinstance(data, int):
+                        d_type = "int"
+                    elif isinstance(data, (list, tuple)):
+                        d_type = "list"
 
                 old_data = FileService.read_cache(config_path, file_name, d_type)
-                
+
                 if old_data is not None:
                     if d_type == "int":
                         data = old_data + data
@@ -268,12 +273,12 @@ class FileService:
                             try:
                                 # 1. 强制索引对齐，确保 combine_first 能按位置合并
                                 data.index = old_data.index
-                                
+
                                 # 2. 将空字符串统一转为 NaN，否则 combine_first 不会进行覆盖合并
                                 import numpy as np
                                 data = data.replace(r'^\s*$', np.nan, regex=True)
                                 old_data = old_data.replace(r'^\s*$', np.nan, regex=True)
-                                
+
                                 # 3. 使用 combine_first 合并数据
                                 data = data.combine_first(old_data)
                             except Exception as merge_err:
@@ -286,7 +291,7 @@ class FileService:
 
             os.makedirs(config_path, exist_ok=True)
             content = ""
-            # 处理 DataFrame
+            # 处理 DataFrame (尝试导入 pandas)
             try:
 
                 if isinstance(data, pd.DataFrame):
@@ -300,7 +305,7 @@ class FileService:
                     content = "\n".join(str(item) for item in data)
                 else:
                     content = str(data)
-            
+
             with open(full_path, "w", encoding="utf-8") as f:
                 f.write(content)
             return True
@@ -319,10 +324,10 @@ class FileService:
             full_path = os.path.join(config_path, file_name)
             if not os.path.exists(full_path):
                 return None
-            
+
             with open(full_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            
+
             result = None
             if data_type == "int":
                 try:
@@ -346,8 +351,8 @@ class FileService:
             # 处理特定记录提取
             if record_index is not None and result is not None:
                 if data_type == "int":
-                    return result # int 忽略 record_index
-                
+                    return result  # int 忽略 record_index
+
                 try:
                     if data_type == "list":
                         return result[record_index] if 0 <= record_index < len(result) else None
@@ -359,7 +364,7 @@ class FileService:
                 except Exception as e:
                     print(f"Error fetching record at index {record_index}: {e}")
                     return None
-            
+
             return result
         except Exception as e:
             print(f"Error reading cache from {file_name}: {e}")
@@ -374,7 +379,7 @@ class FileService:
         data = FileService.read_cache(config_path, file_name, data_type)
         if data is None:
             return 0
-            
+
         if data_type == "int":
             return 1
         elif data_type == "list":
@@ -389,20 +394,37 @@ class FileService:
         return 0
 
     @staticmethod
-    def get_db_conn_string(config_file="config/db_config.json"):
+    def get_db_conn_string(config_file=None):
         """
         自动读取数据库配置文件并生成当前选中的连接字符串。
+        如果未指定 config_file，则根据 config/db_path_config.json 获取。
         """
+        if config_file is None:
+            # 尝试获取自定义目录
+            path_config_file = "config/db_path_config.json"
+            if os.path.exists(path_config_file):
+                try:
+                    with open(path_config_file, "r", encoding="utf-8") as f:
+                        path_config = json.load(f)
+                    config_dir = path_config.get("config_dir", "config")
+                    # 同样增加扩展家目录的处理，确保抓取逻辑也能找到文件
+                    expanded_dir = os.path.expanduser(config_dir)
+                    config_file = os.path.join(expanded_dir, "db_config.json")
+                except:
+                    config_file = "config/db_config.json"
+            else:
+                config_file = "config/db_config.json"
+
         config = FileService.load_json(config_file)
         if not config or "databases" not in config:
             return ""
-        
+
         idx = config.get("current_index", 0)
         databases = config.get("databases", [])
-        
+
         if idx < 0 or idx >= len(databases):
             return ""
-            
+
         db_cfg = databases[idx]
         db_type = db_cfg.get("type")
         host = db_cfg.get("host")
@@ -411,7 +433,7 @@ class FileService:
         user = db_cfg.get("username")
         pwd = db_cfg.get("password")
         params = db_cfg.get("params", "")
-        
+
         return FileService.generate_conn_string(db_type, host, port, db_name, user, pwd, params)
 
     @staticmethod
@@ -430,7 +452,7 @@ class FileService:
             conn_str = f"mssql+pymssql://{user}:{pwd}@{host}:{port}/{db_name}"
         elif db_type == "Oracle":
             conn_str = f"oracle+cx_oracle://{user}:{pwd}@{host}:{port}/?service_name={db_name}"
-        
+
         if params and conn_str:
             if "?" in conn_str:
                 conn_str += f"&{params}"

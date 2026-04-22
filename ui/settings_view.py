@@ -10,6 +10,9 @@ from services.ui_service import UIService
 def create_settings(parent, layout, t):
     # 加载现有配置
     config_data = DBService.load_config()
+    path_config = DBService.load_path_config()
+    current_config_dir = path_config.get("config_dir", "config")
+
     db_config = config_data["databases"][0] if config_data["databases"] else {}
 
     # 字体设置
@@ -36,6 +39,30 @@ def create_settings(parent, layout, t):
     config_name_input.setStyleSheet(input_style)
     form_layout.addRow(QLabel(f"{t('config_name')}:", font=base_font), config_name_input)
 
+    # 配置目录组合控件
+    config_dir_layout = QHBoxLayout()
+    config_dir_input = QLineEdit(current_config_dir)
+    config_dir_input.setFont(base_font)
+    config_dir_input.setStyleSheet(input_style)
+
+    btn_browse_dir = QPushButton("...")
+    btn_browse_dir.setFixedWidth(40)
+    btn_browse_dir.setCursor(Qt.PointingHandCursor)
+    btn_browse_dir.setStyleSheet(
+        "QPushButton { background-color: #e0e0e0; color: #333; border: 1px solid #d1d1d6; border-radius: 4px; } QPushButton:hover { background-color: #d1d1d6; }")
+
+    config_dir_layout.addWidget(config_dir_input)
+    config_dir_layout.addWidget(btn_browse_dir)
+    form_layout.addRow(QLabel(f"{t('config_dir')}:", font=base_font), config_dir_layout)
+
+    def on_browse_dir():
+        from PyQt5.QtWidgets import QFileDialog
+        dir_path = QFileDialog.getExistingDirectory(parent, t("select_config_dir"), config_dir_input.text())
+        if dir_path:
+            config_dir_input.setText(dir_path)
+
+    btn_browse_dir.clicked.connect(on_browse_dir)
+
     db_type_combo = QComboBox()
     db_type_combo.setFont(base_font)
     db_type_combo.setStyleSheet(input_style)
@@ -53,7 +80,7 @@ def create_settings(parent, layout, t):
     port_input.setStyleSheet(input_style)
     form_layout.addRow(QLabel(f"{t('port')}:", font=base_font), port_input)
 
-    db_name_input = QLineEdit(db_config.get("database", "sqlitedb/craw.db"))
+    db_name_input = QLineEdit(db_config.get("database", "。sqlitedb/spiderling.db"))
     db_name_input.setFont(base_font)
     db_name_input.setStyleSheet(input_style)
     form_layout.addRow(QLabel(f"{t('database')}:", font=base_font), db_name_input)
@@ -154,6 +181,33 @@ def create_settings(parent, layout, t):
         保存数据库配置到 JSON 文件。
         """
         try:
+            import os
+            import shutil
+
+            # 获取原来的路径
+            old_full_path = DBService.get_config_path()
+            new_config_dir = config_dir_input.text().strip()
+            if not new_config_dir:
+                new_config_dir = "config"
+
+            # 保存路径配置
+            DBService.save_path_config(new_config_dir)
+            new_full_path = DBService.get_config_path()
+
+            # 扩展新目录路径以用于创建物理目录
+            expanded_new_dir = os.path.expanduser(new_config_dir)
+
+            # 如果路径变了，且原文件存在，则移动文件
+            if old_full_path != new_full_path and os.path.exists(old_full_path):
+                # 确保新目录存在
+                os.makedirs(expanded_new_dir, exist_ok=True)
+                # 如果目标文件已存在，则根据当前 UI 设置覆盖它
+                if not os.path.exists(new_full_path):
+                    shutil.move(old_full_path, new_full_path)
+                else:
+                    # 如果新位置已经有一个同名文件，我们根据当前 UI 设置覆盖它
+                    pass
+
             config = DBService.load_config()
             new_db = {
                 "id": db_config.get("id", "default"),  # 保持原有 ID
