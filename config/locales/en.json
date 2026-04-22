@@ -193,7 +193,7 @@
   "action_scrape_web": "Scrape from Page",
   "action_parse_html": "Extract from Local HTML",
   "action_parse_url": "Parse from URL",
-  "action_iterate_file": "Iterate via Cache File",
+  "action_iterate_file": "Iterate via variable (cache)",
   "action_end_iteration": "End iteration",
   "action_stage_data": "Stage Data",
   "action_clear_cache": "Clear Cache",
@@ -209,13 +209,13 @@
   "about_app_version": "Version: v1.0.0",
   "loading_default_config": "Loading default config",
   "excel_loaded_success": "Excel loaded successfully, Sheet count",
-  "status_ready": "Ready - Menus include: File, Edit, Database, Scrape, Help",
+  "status_ready": "Ready - Menus include: File, Edit, Database, Help",
   "open_workspace": "Open Workspace",
   "del_step_success": "Step deleted successfully",
   "del_step_failed": "Failed to delete step",
   "del_sheet_success": "Sheet deleted successfully",
   "del_sheet_failed": "Failed to delete sheet",
   "about_app_description": "A simple and efficient automated web scraping tool.",
-  "stage_large_int_to_str": "Convert long IDs or large numbers to strings to prevent precision loss during export",
-  "stage_percent_to_float": "Convert percentages (e.g., 15%) to float (0.15)"
+  "stage_large_int_to_str": "Convert large numbers to strings",
+  "stage_percent_to_float": "Convert percentages to float"
 }

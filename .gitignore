@@ -233,3 +233,4 @@ LICENSE
 *.bat
 *.sh
 .gitignore
+.test/

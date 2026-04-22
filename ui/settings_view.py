@@ -34,16 +34,24 @@ def create_settings(parent, layout, t):
 
     input_style = UIService.get_style("input_field")
 
-    config_name_input = QLineEdit(db_config.get("name", "Default"))
-    config_name_input.setFont(base_font)
-    config_name_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('config_name')}:", font=base_font), config_name_input)
+    def _create_input(value, is_password=False):
+        edit = QLineEdit(str(value))
+        edit.setFont(base_font)
+        edit.setStyleSheet(input_style)
+        if is_password:
+            edit.setEchoMode(QLineEdit.Password)
+        return edit
+
+    def _add_input_row(label_text, value, is_password=False):
+        edit = _create_input(value, is_password)
+        form_layout.addRow(QLabel(label_text, font=base_font), edit)
+        return edit
+
+    config_name_input = _add_input_row(f"{t('config_name')}:", db_config.get("name", "Default"))
 
     # 配置目录组合控件
     config_dir_layout = QHBoxLayout()
-    config_dir_input = QLineEdit(current_config_dir)
-    config_dir_input.setFont(base_font)
-    config_dir_input.setStyleSheet(input_style)
+    config_dir_input = _create_input(current_config_dir)
 
     btn_browse_dir = QPushButton("...")
     btn_browse_dir.setFixedWidth(40)
@@ -70,41 +78,13 @@ def create_settings(parent, layout, t):
     db_type_combo.setCurrentText(db_config.get("type", "SQLite"))
     form_layout.addRow(QLabel(f"{t('db_type')}:", font=base_font), db_type_combo)
 
-    host_input = QLineEdit(db_config.get("host", ""))
-    host_input.setFont(base_font)
-    host_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('host')}:", font=base_font), host_input)
-
-    port_input = QLineEdit(db_config.get("port", ""))
-    port_input.setFont(base_font)
-    port_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('port')}:", font=base_font), port_input)
-
-    db_name_input = QLineEdit(db_config.get("database", "。sqlitedb/spiderling.db"))
-    db_name_input.setFont(base_font)
-    db_name_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('database')}:", font=base_font), db_name_input)
-
-    user_input = QLineEdit(db_config.get("username", ""))
-    user_input.setFont(base_font)
-    user_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('username')}:", font=base_font), user_input)
-
-    pass_input = QLineEdit(db_config.get("password", ""))
-    pass_input.setFont(base_font)
-    pass_input.setStyleSheet(input_style)
-    pass_input.setEchoMode(QLineEdit.Password)
-    form_layout.addRow(QLabel(f"{t('password')}:", font=base_font), pass_input)
-
-    table_input = QLineEdit(db_config.get("table_name", ""))
-    table_input.setFont(base_font)
-    table_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('table_name')}:", font=base_font), table_input)
-
-    params_input = QLineEdit(db_config.get("params", ""))
-    params_input.setFont(base_font)
-    params_input.setStyleSheet(input_style)
-    form_layout.addRow(QLabel(f"{t('conn_params')}:", font=base_font), params_input)
+    host_input = _add_input_row(f"{t('host')}:", db_config.get("host", ""))
+    port_input = _add_input_row(f"{t('port')}:", db_config.get("port", ""))
+    db_name_input = _add_input_row(f"{t('database')}:", db_config.get("database", "sqlitedb/craw.db"))
+    user_input = _add_input_row(f"{t('username')}:", db_config.get("username", ""))
+    pass_input = _add_input_row(f"{t('password')}:", db_config.get("password", ""), is_password=True)
+    table_input = _add_input_row(f"{t('table_name')}:", db_config.get("table_name", ""))
+    params_input = _add_input_row(f"{t('conn_params')}:", db_config.get("params", ""))
 
     conn_string_text = QTextEdit()
     conn_string_text.setFont(mono_font)

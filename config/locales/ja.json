@@ -193,7 +193,7 @@
   "action_scrape_web": "ページからデータ抽出",
   "action_parse_html": "保存済みHTMLから抽出",
   "action_parse_url": "URLからデータ抽出",
-  "action_iterate_file": "キャッシュでループ",
+  "action_iterate_file": "変数(cache)を抽出してループ実行",
   "action_end_iteration": "ループ終了",
   "action_stage_data": "データ準備",
   "action_clear_cache": "キャッシュクリア",
@@ -209,13 +209,13 @@
   "about_app_version": "バージョン: v1.0.0",
   "loading_default_config": "デフォルト設定を読み込んでいます",
   "excel_loaded_success": "Excelの読み込みに成功しました。シート数",
-  "status_ready": "準備完了 - メニュー：ファイル、編集、データベース、スクレイピング、ヘルプ",
+  "status_ready": "準備完了 - メニュー：ファイル、編集、データベース、ヘルプ",
   "open_workspace": "ワークスペースを開く",
   "del_step_success": "ステップを正常に削除しました",
   "del_step_failed": "ステップの削除に失敗しました",
   "del_sheet_success": "シートを正常に削除しました",
   "del_sheet_failed": "シートの削除に失敗しました",
   "about_app_description": "シンプルで効率的な自動化ウェブスクレイピングツール。",
-  "stage_large_int_to_str": "長いIDや大きな数値を文字列に変換し、エクスポート時の精度低下を防ぎます",
-  "stage_percent_to_float": "パーセント表示（15%など）を浮動小数点（0.15）に変換します"
+  "stage_large_int_to_str": "大きな数値列を文字列に変換",
+  "stage_percent_to_float": "パーセントを浮動小数点に変換"
 }

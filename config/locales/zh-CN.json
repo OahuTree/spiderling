@@ -193,7 +193,7 @@
   "action_scrape_web": "从网页解析",
   "action_parse_html": "从本地保存的html文件中提取信息",
   "action_parse_url": "从URL中解析",
-  "action_iterate_file": "从本地的cache文件中提取数据进行循环",
+  "action_iterate_file": "提取变量(cache)数据进行循环",
   "action_end_iteration": "结束iterate_file循环",
   "action_stage_data": "准备数据",
   "action_clear_cache": "删除本地缓存文件",
@@ -209,13 +209,13 @@
   "about_app_version": "版本: v1.0.0",
   "loading_default_config": "正在加载默认配置",
   "excel_loaded_success": "成功加载 Excel，Sheet 数量",
-  "status_ready": "就绪 - 菜单栏包含: 文件、编辑、数据库、抓取、帮助",
+  "status_ready": "就绪 - 菜单栏包含: 文件、编辑、数据库、帮助",
   "open_workspace": "打开工作台",
   "del_step_success": "成功删除步骤",
   "del_step_failed": "删除步骤失败",
   "del_sheet_success": "成功删除 Sheet",
   "del_sheet_failed": "删除 Sheet 失败",
   "about_app_description": "一款简单、高效的自动化网页内容采集工具。",
-  "stage_large_int_to_str": "将长 ID 或大数字列转换为字符串，防止导出时精度丢失",
-  "stage_percent_to_float": "将百分数（如 15%）转换为浮点数（0.15）"
+  "stage_large_int_to_str": "转换大数字列转换为字符串",
+  "stage_percent_to_float": "将百分数转换为浮点数"
 }

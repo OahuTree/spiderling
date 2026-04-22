@@ -16,6 +16,6 @@
     { "key": "source_type", "i18n_key": "field_source_type", "type": "combobox", "data_type": "string", "options_source": "source_type.json" },
     { "key": "stage_type", "i18n_key": "field_stage_type", "type": "combobox", "data_type": "string", "options_source": "stage_type.json", "width": 150 },
     { "key": "remap", "i18n_key": "field_remap", "type": "text", "data_type": "string", "rows": 5 },
-    { "key": "ignore_error", "i18n_key": "field_ignore_error", "type": "combobox", "data_type": "string", "options_source": "ignore_type.json"}
+    { "key": "ignore_error", "i18n_key": "field_ignore_error", "type": "combobox", "data_type": "string", "options_source": "ignore_type.json" }
   ]
 }

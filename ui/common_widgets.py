@@ -16,6 +16,13 @@ class NoWheelSpinBox(QSpinBox):
         event.ignore()
 
 
+class NoWheelComboBox(QComboBox):
+    """禁止鼠标滚轴使用"""
+
+    def wheelEvent(self, event):
+        event.ignore()
+
+
 class StepDialog(QDialog):
     """
     步聚详情编辑对话框。
@@ -131,7 +138,7 @@ class StepDialog(QDialog):
         key = field.get("key")
 
         if field_type == "combobox":
-            widget = QComboBox()
+            widget = NoWheelComboBox()
             widget.setFont(self.base_font)
             widget.setStyleSheet(UIService.get_style("input_field"))
             widget.setFixedHeight(35)
