@@ -206,7 +206,7 @@
   "clear_chrome_cache": "Clear Chrome Cache",
   "kill_chrome_processes": "Kill Chrome Processes",
   "about_app_name": "Spiderling - Web Scraper",
-  "about_app_version": "Version: v1.0.0",
+  "about_app_version": "Version: ",
   "loading_default_config": "Loading default config",
   "excel_loaded_success": "Excel loaded successfully, Sheet count",
   "status_ready": "Ready - Menus include: File, Edit, Database, Help",
@@ -217,5 +217,6 @@
   "del_sheet_failed": "Failed to delete sheet",
   "about_app_description": "A simple and efficient automated web scraping tool.",
   "stage_large_int_to_str": "Convert large numbers to strings",
-  "stage_percent_to_float": "Convert percentages to float"
+  "stage_percent_to_float": "Convert percentages to float",
+  "stage_comma_int_to_int": "Remove thousand separators"
 }

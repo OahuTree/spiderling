@@ -206,7 +206,7 @@
   "clear_chrome_cache": "清空Chrome缓存",
   "kill_chrome_processes": "清理Chrome进程",
   "about_app_name": "Spiderling - 网页内容抓取器",
-  "about_app_version": "版本: v1.0.0",
+  "about_app_version": "版本: ",
   "loading_default_config": "正在加载默认配置",
   "excel_loaded_success": "成功加载 Excel，Sheet 数量",
   "status_ready": "就绪 - 菜单栏包含: 文件、编辑、数据库、帮助",

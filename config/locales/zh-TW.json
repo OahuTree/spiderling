@@ -207,7 +207,7 @@
   "clear_chrome_cache": "清空Chrome快取",
   "kill_chrome_processes": "清理Chrome進程",
   "about_app_name": "Spiderling - 網頁內容抓取器",
-  "about_app_version": "版本: v1.0.0",
+  "about_app_version": "版本: ",
   "loading_default_config": "正在載入預設配置",
   "excel_loaded_success": "成功載入 Excel，Sheet 數量",
   "status_ready": "就緒 - 功能表欄包含：檔案、編輯、資料庫、幫助",
@@ -218,5 +218,6 @@
   "del_sheet_failed": "刪除 Sheet 失敗",
   "about_app_description": "一款簡單、高效的自動化網頁內容採集工具。",
   "stage_large_int_to_str": "轉換大數字列轉換為字串",
-  "stage_percent_to_float": "將百分數轉換為浮點數"
+  "stage_percent_to_float": "將百分數轉換為浮點數",
+  "stage_comma_int_to_int": "取消千分位"
 }
