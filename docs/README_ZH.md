@@ -20,3 +20,44 @@ Spiderling 是一款基于 Python 和 PyQt5 构建的简单、高效、自动化
 - **多数据库支持**：可将抓取的数据无缝存储至 **SQLite、MySQL、PostgreSQL、SQL Server 或 Oracle**。
 - **浏览器管理**：集成清空 Chrome 缓存和强制清理浏览器进程的功能。
 - **多语言支持**：内置 **简体中文、繁体中文、英语、日语**。
+
+## 📦 安装说明
+
+### 环境要求
+- Python 3.10+
+- 已安装 Google Chrome 浏览器
+
+### 安装步骤
+1. **克隆仓库**：
+   ```bash
+   git clone https://github.com/OahuTree/spiderling.git
+  
+
+2. **安装依赖**：
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **启动程序**：
+   ```bash
+   python spiderling.py
+   ```
+
+## 📖 使用指南
+1. **浏览器配置**：如果程序未自动识别，请在设置中指定 Chrome 浏览器的可执行文件路径。
+2. **数据库设置**：在“数据库配置”选项卡中设置目标数据库连接。
+3. **定义步骤**：
+   - 新增工作表。
+   - 使用“添加步骤”对话框定义抓取逻辑。
+   - 选择动作类型（如“定位网页”、“点击控件”、“从网页解析”），并填写相应参数（URL、CSS 选择器等）。
+   - 可以参考[spiderling_example.xlsx](spiderling_example.xlsx)
+4. **数据转换**：在保存前使用“准备数据 (Stage Data)”动作应用数据转换规则。
+5. **执行任务**：点击“开始抓取”启动自动化流程。您可以在其底部的“日志中心”监控运行进度。
+
+## ⚙️ 配置文件说明
+
+- **多语言**：翻译文件位于 `config/locales/`。
+
+---
+
+**Spiderling** - 让自动化数据采集变得简单。
