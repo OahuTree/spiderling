@@ -6,12 +6,13 @@
       "pattern": "", 
       "action": ""
     },
+    /**
     { 
       "key": "large_int_to_str", 
       "i18n_key": "stage_large_int_to_str", 
       "pattern": "^\\d{15,}$", 
       "action": "str" 
-    },
+    },*/
     { 
       "key": "percent_to_float", 
       "i18n_key": "stage_percent_to_float", 

@@ -310,7 +310,7 @@ class ScraperActions:
             _current = FileService.read_cache(config_path=self.cache_path, file_name=row.get("cache"), data_type="int")
             _max = self._safe_int(row.get("variable"), 1)
             _next = self._safe_int(row.get("input"))
-            if _max <= _current:
+            if _max < _current:
                 # 停止跳转
                 self.next_id = -1
                 self.log(f"{self.t('jump_max_reached')}: {_max} <= {_current}")
