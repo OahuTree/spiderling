@@ -40,7 +40,9 @@ class DataStageService:
         def _apply_convert(val):
             if val is None or pd.isna(val):
                 return val
-            
+            # 核心修正：如果已经是 int 且是超长数字，直接返回，不要转字符串再转回来
+            if isinstance(val, int):
+                return val
             # 转为字符串执行正则判断
             # 如果是浮点数且可能是大整数，尝试转为非科学计数法字符串
             if isinstance(val, (float, int)) and abs(val) >= 1e14:
@@ -60,8 +62,16 @@ class DataStageService:
                         return float(clean_num)
                     elif action == "int":
                         # 尝试提取数字部分
-                        clean_num = re.sub(r'[^\d\-]', '', s_val)
-                        return int(float(clean_num))
+                        # clean_num = re.sub(r'[^\d\-]', '', s_val)
+                        # return int(float(clean_num)) #该处大数字会丢失精度
+
+                        clean_num = re.sub(r'[^\d\.\-]', '', s_val)  # 保留小数点以供后续处理
+                        if '.' in clean_num:
+                            # 如果有小数点，先转 float 再转 int（注意：此时 20 位大数依然会丢精度）
+                            return int(float(clean_num))
+                        else:
+                            # 如果没有小数点，直接转 int，确保超长整数的 100% 精确
+                            return int(clean_num)
                 except Exception:
                     # 转换失败则保持原样
                     return val

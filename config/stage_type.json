@@ -17,6 +17,12 @@
       "i18n_key": "stage_percent_to_float", 
       "pattern": "^\\s*-?[\\d\\.]+\\s*%\\s*$", 
       "action": "float"
+    },
+    {
+      "key": "comma_int_to_int",
+      "i18n_key": "stage_comma_int_to_int",
+      "pattern": "^[\\d,]+$",
+      "action": "int"
     }
   ]
 }

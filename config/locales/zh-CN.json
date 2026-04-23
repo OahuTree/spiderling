@@ -217,5 +217,6 @@
   "del_sheet_failed": "删除 Sheet 失败",
   "about_app_description": "一款简单、高效的自动化网页内容采集工具。",
   "stage_large_int_to_str": "转换大数字列转换为字符串",
-  "stage_percent_to_float": "将百分数转换为浮点数"
+  "stage_percent_to_float": "将百分数转换为浮点数",
+  "stage_comma_int_to_int": "取消千分位"
 }
