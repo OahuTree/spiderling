@@ -1,4 +1,5 @@
 import ast
+import os
 import re
 import time
 from io import StringIO
@@ -10,7 +11,7 @@ from bs4 import BeautifulSoup
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.support import expected_conditions as EC
 
 from services.db_service import DBService
 from services.file_service import FileService
@@ -30,8 +31,25 @@ class ScraperActions:
         self.next_id = -1
         # current_record用于记录循环记录数
         self.current_record = 0
-        # 定义临时目录
-        self.cache_path = ".cache"
+        # 定义缓存目录
+        self.cache_path = self._get_cache_path()
+
+
+    def _get_cache_path(self):
+        """获取缓存目录"""
+        _chrome_option_path = FileService.get_browser_user_data_dir()
+        if not _chrome_option_path:
+            _msg = "browser user path can not found.please config browser config."
+            self.log(_msg, "red")
+            raise RuntimeError(_msg)
+
+        _cache_path = os.path.expanduser(_chrome_option_path) + ".cache"
+        # 如果不存在缓存目录则创建一个
+        if not os.path.exists(_cache_path):
+            os.makedirs(_cache_path)
+
+        return _cache_path
+
 
     def log(self, msg, color="black"):
         if self.log_func:

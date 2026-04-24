@@ -394,6 +394,15 @@ class FileService:
         return 0
 
     @staticmethod
+    def get_browser_user_data_dir():
+        """
+        读取 browser_config.json 文件中定义的 user_data_dir 值。
+        """
+        config_file = "config/browser_config.json"
+        config = FileService.load_json(config_file)
+        return config.get("user_data_dir", "")
+
+    @staticmethod
     def get_db_conn_string(config_file=None):
         """
         自动读取数据库配置文件并生成当前选中的连接字符串。
@@ -443,7 +452,8 @@ class FileService:
         """
         conn_str = ""
         if db_type == "SQLite":
-            conn_str = f"sqlite:///{db_name}"
+            full_path = os.path.expanduser(db_name)
+            conn_str = f"sqlite:///{full_path}"
         elif db_type == "MySQL":
             conn_str = f"mysql+pymysql://{user}:{pwd}@{host}:{port}/{db_name}"
         elif db_type == "PostgreSQL":

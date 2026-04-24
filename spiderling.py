@@ -408,8 +408,10 @@ if __name__ == "__main__":
         # 加载程序图标。
         myappid = 'my_unique_app_id_string'
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+        icon_path = os.path.join("assets", "logo.png")
+    elif platform.system().lower() == "darwin":
+        icon_path = os.path.join("assets", "logo.icns")
 
-    icon_path = os.path.join("assets", "logo.png")
     if os.path.exists(icon_path):
         app.setWindowIcon(QIcon(icon_path))
 
