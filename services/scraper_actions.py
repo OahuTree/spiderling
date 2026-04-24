@@ -256,20 +256,21 @@ class ScraperActions:
 
         try:
             # 1. 读取数据
-            df = FileService.read_cache(self.cache_path, _input_file, data_type="dataframe")
-            if df is None or df.empty:
+            _df = FileService.read_cache(self.cache_path, _input_file, data_type="dataframe")
+
+            if _df is None or _df.empty:
                 self.log(f"{self.t('warn_cache_empty')}: {_input_file}", "yellow")
                 return
 
             # 2. 如果指定了 stage_type，则调用 DataStageService 进行转换
             if _stage_key:
                 from services.data_stage_service import DataStageService
-                df = DataStageService.transform(df, _stage_key)
+                _df = DataStageService.transform(_df, _stage_key)
                 self.log(f"{self.t('applied_transform')}: {_stage_key}")
 
             # 3. 如果指定了输出变量，则保存结果
             if _output_file:
-                FileService.write_cache(self.cache_path, _output_file, df, delete_existing=True)
+                FileService.write_cache(self.cache_path, _output_file, _df, delete_existing=True)
                 self.log(f"{self.t('data_processed_save')}: {_output_file}")
             else:
                 self.log(self.t("warn_no_variable_stage"), "yellow")
