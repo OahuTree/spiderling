@@ -2,5 +2,6 @@
   { "code": "zh-CN", "label": "中文简体" },
   { "code": "zh-TW", "label": "中文繁體" },
   { "code": "en", "label": "English" },
-  { "code": "ja", "label": "日本語" }
+  { "code": "ja", "label": "日本語" },
+  { "code": "ja-trad", "label": "日本語 (和風)" }
 ]

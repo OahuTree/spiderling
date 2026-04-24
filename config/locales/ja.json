@@ -159,6 +159,7 @@
   "lang_zh": "中国語",
   "lang_en": "英語",
   "lang_ja": "日本語",
+  "lang_ja_trad": "日本語 (和風)",
   "disable_drag": "ドラッグを無効化",
   "menu_language": "言語",
   "lang_changed_tip": "言語が変更されました。",
