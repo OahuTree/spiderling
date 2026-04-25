@@ -5,7 +5,7 @@
 
 Spiderling 是一款基於 Python 和 PyQt5 構建的簡單、高效、自動化的網頁內容採集工具。它提供了一個友好的圖形介面，讓用戶無需深入的程式碼知識即可定義、管理和執行複雜的採集工作流。
 
-![dashboard.png](images/dashboard.png)
+![dashboard.png](images/dashboard_tw.png)
 
 ## 🚀 功能特性
 
@@ -54,7 +54,7 @@ Spiderling 是一款基於 Python 和 PyQt5 構建的簡單、高效、自動化
    - 新增工作表。
    - 使用「添加步驟」對話框定義採集邏輯。
    - 選擇動作類型（如「定位網頁」、「點擊元件」、「網頁解析」），並填寫相應參數（URL、CSS 選擇器等）。
-   - 可以參考 [spiderling_example.xlsx](spiderling_example.xlsx)
+   - 可以參考 [spiderling_example_tw.xlsx](spiderling_example_tw.xlsx)
 4. **數據轉換**：在保存前使用「準備數據 (Stage Data)」動作應用數據轉換規則。
 5. **執行任務**：點擊「開始採集」啟動自動化流程。您可以在底部的「日誌中心」監控運行進度。
 6. **目錄讀寫權限**：程式會在當前登錄用戶目錄下建立 oahutree_spiderling 資料夾，請確保程式擁有目錄讀寫權限。

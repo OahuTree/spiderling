@@ -4,7 +4,7 @@
 
 Spiderling is a simple, efficient, and automated web content scraping tool built with Python and PyQt5. It provides a user-friendly graphical interface that allows users to define, manage, and execute complex scraper workflows without in-depth coding knowledge.
 
-![dashboard.png](docs/images/dashboard.png)
+![dashboard.png](docs/images/dashboard_en.png)
 
 ## 🚀 Features
 
@@ -53,7 +53,7 @@ Spiderling is a simple, efficient, and automated web content scraping tool built
    - Add a new worksheet.
    - Use the "Add Step" dialog to define scraping logic.
    - Select an action type (e.g., "Navigate to Page", "Click Control", "Web Parsing") and fill in the corresponding parameters (URL, CSS Selector, etc.).
-   - You can refer to [spiderling_example.xlsx](docs/spiderling_example.xlsx)
+   - You can refer to [spiderling_example_en.xlsx](docs/spiderling_example_en.xlsx)
 4. **Data Transformation**: Apply data transformation rules using the "Stage Data" action before saving.
 5. **Execute Task**: Click "Start Scrape" to launch the automated process. You can monitor progress in the "Log Center" at the bottom.
 6. **Directory Permissions**: The program will create an 'oahutree_spiderling' folder in the current user's home directory. Please ensure the program has read and write permissions for this directory.
