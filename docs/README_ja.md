@@ -1,6 +1,7 @@
 # Spiderling - ウェブスクレイパー (Web Scraper)
 
-[简体中文](docs/README_zh.md) | [繁體中文](docs/README_tw.md) | [日本語](docs/README_ja.md) | [日本語 (和風)](docs/README_ja_trad.md) | [English](README.md)
+[简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [日本語 (和風)](README_ja_trad.md) | [English](../README.md)  
+
 
 Spiderlingは、PythonとPyQt5で構築された、シンプルで効率的、そして自動化されたウェブコンテンツ収集ツールです。深いプログラミングの知識がなくても、複雑なスクレイピングワークフローを定義、管理、実行できる使いやすいグラフィカルインターフェースを提供します。
 

@@ -1,6 +1,7 @@
 # Spiderling - 網頁內容採集器 (Web Scraper)
 
-[简体中文](docs/README_zh.md) | [繁體中文](docs/README_tw.md) | [日本語](docs/README_ja.md) | [日本語 (和風)](docs/README_ja_trad.md) | [English](README.md)
+[简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [日本語 (和風)](README_ja_trad.md) | [English](../README.md)
+
 
 Spiderling 是一款基於 Python 和 PyQt5 構建的簡單、高效、自動化的網頁內容採集工具。它提供了一個友好的圖形介面，讓用戶無需深入的程式碼知識即可定義、管理和執行複雜的採集工作流。
 

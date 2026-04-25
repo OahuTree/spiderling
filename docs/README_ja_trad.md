@@ -1,6 +1,6 @@
 # Spiderling - 電脳情報収集機 (ウェブスクレイパー)
 
-[简体中文](docs/README_zh.md) | [繁體中文](docs/README_tw.md) | [日本語](docs/README_ja.md) | [日本語 (和風)](docs/README_ja_trad.md) | [English](README.md)
+[简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [日本語 (和風)](README_ja_trad.md) | [English](../README.md)
 
 Spiderling（スパイダーリング）は、PythonとPyQt5を用いて誂えた、簡便かつ強力な自動情報収集器にございます。深遠なる電脳の知識を要さずとも、複雑な収集工程を定義・管理・執行できる、使い勝手の良い画面を提供いたす。
 
