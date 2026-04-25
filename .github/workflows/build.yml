@@ -1,0 +1,84 @@
+name: Build Spiderling Multi-Arch
+
+on:
+  push:
+    branches: [ "master" ] # 已修改为你的 master 分支
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            executable_path: "dist/spiderling"
+          - os: macos-13            # Intel x86 架构
+            platform: macos-x86_64
+            executable_path: "dist/spiderling.app"
+          - os: macos-latest        # M系列 arm64 架构
+            platform: macos-arm64
+            executable_path: "dist/spiderling.app"
+          - os: ubuntu-20.04
+            platform: linux
+            executable_path: "dist/spiderling"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller
+          pip install -r requirements.txt
+          if [ "${{ runner.os }}" == "Linux" ]; then
+            sudo apt-get update
+            sudo apt-get install -y libxcb-xinerama0 libx11-xcb1 binutils
+          fi
+        shell: bash
+
+      # --- Windows 专用打包 (保留你的 xcopy 习惯，最稳妥) ---
+      - name: Build on Windows
+        if: matrix.platform == 'windows'
+        run: |
+          pyinstaller --windowed --onedir --noconfirm ^
+          --icon="assets/logo.ico" ^
+          --hidden-import="psycopg2" --hidden-import="pymssql" ^
+          --hidden-import="selenium" --hidden-import="webdriver-manager" ^
+          --hidden-import="selenium.webdriver.chrome.webdriver" ^
+          spiderling.py
+          xcopy /s /e /i .\config\. .\dist\spiderling\config\.
+          xcopy /s /e /i .\assets\. .\dist\spiderling\assets\.
+        shell: cmd
+
+      # --- Mac 和 Linux 专用打包 (统一使用 --add-data) ---
+      - name: Build on Mac and Linux
+        if: matrix.platform != 'windows'
+        run: |
+          # 根据平台选择图标参数
+          ICON_ARG=""
+          if [ "${{ runner.os }}" == "macOS" ]; then
+            ICON_ARG="--icon=assets/logo.icns"
+          fi
+
+          pyinstaller --windowed --onedir --noconfirm \
+          $ICON_ARG \
+          --add-data "config:config" \
+          --add-data "assets:assets" \
+          --hidden-import="psycopg2" --hidden-import="pymssql" \
+          --hidden-import="selenium" --hidden-import="webdriver-manager" \
+          --hidden-import="selenium.webdriver.chrome.webdriver" \
+          spiderling.py
+        shell: bash
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spiderling-${{ matrix.platform }}
+          path: ${{ matrix.executable_path }}
