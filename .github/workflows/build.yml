@@ -13,15 +13,15 @@ jobs:
           - os: windows-latest
             platform: windows
             executable_path: "dist/spiderling"
-          - os: macos-13            # Intel x86 架构
-            platform: macos-x86_64
-            executable_path: "dist/spiderling.app"
+#          - os: macos-13            # Intel x86 架构
+#            platform: macos-x86_64
+#            executable_path: "dist/spiderling.app"
           - os: macos-latest        # M系列 arm64 架构
             platform: macos-arm64
             executable_path: "dist/spiderling.app"
-          - os: ubuntu-20.04
-            platform: linux
-            executable_path: "dist/spiderling"
+#          - os: ubuntu-20.04
+#            platform: linux
+#            executable_path: "dist/spiderling"
 
     runs-on: ${{ matrix.os }}
 
