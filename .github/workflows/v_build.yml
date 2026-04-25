@@ -66,7 +66,7 @@ jobs:
           xcopy /s /e /i .\config\. .\dist\spiderling\config\.
           xcopy /s /e /i .\assets\. .\dist\spiderling\assets\.
           
-          powershell -Command "Compress-Archive -Path 'dist/spiderling' -DestinationPath 'dist/spiderling-windows-${{ github.ref_name || 'manual' }}.zip' -Force"
+#          powershell -Command "Compress-Archive -Path 'dist/spiderling' -DestinationPath 'dist/spiderling-windows-${{ github.ref_name || 'manual' }}.zip' -Force"
         shell: cmd
 
       # --- 3. macOS 编译与制作 DMG ---
