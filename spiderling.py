@@ -273,7 +273,7 @@ class MainWindow(QMainWindow):
             msg.setIconPixmap(pixmap)
 
         msg.setText("Spiderling - Web Scraper")
-        info_text = f"Version: v{self.version}\n\n" \
+        info_text = f"Version:  {self.version}\n\n" \
                     "A simple and efficient automated web scraping tool.\n\n" \
                     "GitHub: https://github.com/OahuTree/spiderling"
         msg.setInformativeText(info_text)
