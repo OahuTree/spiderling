@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
             f"font-weight: bold; font-family: {UIService.get_font_settings().get('font_family')}; color: #1d1d1f;")
 
         # 版本
-        version_label = QLabel(f"v{self.version}")
+        version_label = QLabel(f" {self.version}")
         version_label.setStyleSheet("color: #86868b; font-size: 11px;")
 
         corner_layout.addWidget(logo_label)
