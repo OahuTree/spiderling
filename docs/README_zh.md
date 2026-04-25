@@ -1,6 +1,7 @@
 # Spiderling - 网页内容抓取器
 
-[English](../README.md) | [简体中文](README_zh.md)
+[English](README.md) | [简体中文](docs/README_zh.md) | [繁體中文](docs/README_tw.md) | [日本語](docs/README_ja.md) | [日本語 (和風)](docs/README_ja_trad.md) 
+
 
 Spiderling 是一款基于 Python 和 PyQt5 构建的简单、高效、自动化的网页内容采集工具。它提供了一个友好的图形化界面，让用户无需深入的代码知识即可定义、管理和执行复杂的爬虫工作流。
 
@@ -56,6 +57,7 @@ Spiderling 是一款基于 Python 和 PyQt5 构建的简单、高效、自动化
    - 可以参考[spiderling_example.xlsx](spiderling_example.xlsx)
 4. **数据转换**：在保存前使用“准备数据 (Stage Data)”动作应用数据转换规则。
 5. **执行任务**：点击“开始抓取”启动自动化流程。您可以在其底部的“日志中心”监控运行进度。
+6. **目录读写权限**：程序会在当前登陆用户目录下创建oahutree_spiderling文件夹，请确保程序拥有目录读写权限。
 
 ## ⚙️ 配置文件说明
 
