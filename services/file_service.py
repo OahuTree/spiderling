@@ -39,10 +39,9 @@ class FileService:
             os.makedirs(d, exist_ok=True)
 
         # 需要拷贝的基础文件（相对于当前运行目录）
+        # 只有这些文件需要拷贝到用户目录并支持重置
         base_files = [
-            "settings.ini", "db_config.json", "languages.json", "browser_config.json",
-            "menu.json", "fields.json", "actions.json", "ignore_type.json",
-            "source_type.json", "stage_type.json"
+            "settings.ini", "languages.json", "browser_config.json", "stage_type.json"
         ]
         for f in base_files:
             src = os.path.join("config", f)
@@ -64,9 +63,7 @@ class FileService:
     def get_resetable_files():
         """获取允许重置的文件列表"""
         return [
-            "settings.ini", "languages.json", "browser_config.json",
-            "menu.json", "fields.json", "actions.json", "ignore_type.json",
-            "source_type.json", "stage_type.json"
+            "settings.ini", "languages.json", "browser_config.json", "stage_type.json"
         ]
 
     @staticmethod
@@ -100,8 +97,38 @@ class FileService:
 
     @staticmethod
     def get_config_path(file_name):
-        """获取配置文件的完整路径（在用户目录下）"""
+        """
+        获取配置文件的完整路径。
+        部分核心配置文件从程序根目录的 config 加载（全局共享，不可重置）。
+        用户个性化配置从用户目录下的 config 加载（可重置）。
+        """
+        global_configs = [
+            "menu.json", "fields.json", "actions.json", "ignore_type.json",
+            "source_type.json", "stage_type.json"
+        ]
+        if file_name in global_configs:
+            return os.path.join("config", file_name)
         return os.path.join(FileService.get_config_dir(), file_name)
+
+    @staticmethod
+    def get_last_workbench_file():
+        """从 settings.ini 获取上次打开的工作台文件"""
+        settings_path = FileService.get_config_path("settings.ini")
+        settings = FileService.load_ini(settings_path)
+        path = settings.get("General", {}).get("last_workbench_file", "")
+        if path and os.path.exists(path):
+            return path
+        return None
+
+    @staticmethod
+    def set_last_workbench_file(file_path):
+        """保存当前工作台文件路径到 settings.ini"""
+        settings_path = FileService.get_config_path("settings.ini")
+        settings = FileService.load_ini(settings_path)
+        if "General" not in settings:
+            settings["General"] = {}
+        settings["General"]["last_workbench_file"] = file_path
+        FileService.save_ini(settings_path, settings)
 
     @staticmethod
     def load_json(file_path, default_data=None):

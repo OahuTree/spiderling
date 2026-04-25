@@ -234,3 +234,4 @@ LICENSE
 *.sh
 .gitignore
 .test/
+version_info.py
