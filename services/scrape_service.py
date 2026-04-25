@@ -28,7 +28,7 @@ class ScrapeWorker(QObject):
         self.config = config
         self.data = data
         self.sheet_name = sheet_name
-        self.stop_event = threading.Event() # 结束停止信号
+        self.stop_event = threading.Event()  # 结束停止信号
         self.driver = None
 
     def log(self, msg, color="black"):
@@ -75,10 +75,7 @@ class ScrapeWorker(QObject):
             self.log(self.t("err_chrome_not_found"), "red")
             return False
 
-        if platform.system() == "windows":
-            user_data_dir = os.path.abspath(self.config.get("user_data_dir", "chrome_profile"))
-        else:
-            user_data_dir = os.path.expanduser(self.config.get("user_data_dir", "chrome_profile"))
+        user_data_dir = FileService.get_browser_user_data_dir()
 
         args = [
             chrome_path,
@@ -223,7 +220,7 @@ class ScrapeService:
         self.t = t
         self.worker = None
         self.thread = None
-        self.browser_config_path = os.path.join("config", "browser_config.json")
+        self.browser_config_path = FileService.get_config_path("browser_config.json")
         self.config = FileService.load_json(self.browser_config_path)
 
     def log(self, msg, color="black"):
@@ -273,7 +270,7 @@ class ScrapeService:
     def clear_chrome_cache(self):
         """清理 Chrome 浏览器缓存（删除用户数据目录）"""
         try:
-            user_data_dir = os.path.abspath(self.config.get("user_data_dir", "chrome_profile"))
+            user_data_dir = FileService.get_browser_user_data_dir()
             if os.path.exists(user_data_dir):
                 self.log(f"{self.t('clearing_cache_dir')}: {user_data_dir}...")
                 # 递归删除目录
@@ -291,20 +288,20 @@ class ScrapeService:
         try:
             system = platform.system().lower()
             self.log(self.t("killing_chrome"))
-            
+
             if system == "windows":
                 # Windows 使用 taskkill
-                subprocess.run(["taskkill", "/F", "/IM", "chrome.exe", "/T"], 
+                subprocess.run(["taskkill", "/F", "/IM", "chrome.exe", "/T"],
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                subprocess.run(["taskkill", "/F", "/IM", "chromedriver.exe", "/T"], 
+                subprocess.run(["taskkill", "/F", "/IM", "chromedriver.exe", "/T"],
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             else:
                 # Linux/Mac 使用 pkill
-                subprocess.run(["pkill", "-f", "chrome"], 
+                subprocess.run(["pkill", "-f", "chrome"],
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                subprocess.run(["pkill", "-f", "chromedriver"], 
+                subprocess.run(["pkill", "-f", "chromedriver"],
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            
+
             self.log(self.t("chrome_killed"), "green")
             return True
         except Exception as e:

@@ -1,7 +1,7 @@
 {
   "log_center": "Log Center",
   "menu_file": "File",
-  "menu_edit": "Edit",
+  "menu_edit": "System",
   "menu_db": "Database",
   "menu_scrape": "Scrape",
   "menu_help": "Help",
@@ -163,7 +163,8 @@
   "disable_drag": "Disable Drag",
   "menu_language": "Language",
   "lang_changed_tip": "Language has been changed.",
-  "edit_chrome_params": "Edit Chrome Parameters",
+  "edit_chrome_params": "Set Chrome Parameters",
+  "set_workspace_dir": "Set Workspace Directory",
   "edit_action_items": "Edit Action Items",
   "copy_row": "Copy Row",
   "paste_row": "Paste Row",
@@ -210,7 +211,7 @@
   "about_app_version": "Version: ",
   "loading_default_config": "Loading default config",
   "excel_loaded_success": "Excel loaded successfully, Sheet count",
-  "status_ready": "Ready - Menus include: File, Edit, Database, Help",
+  "status_ready": "Ready - Menus include: File, System, Database, Help",
   "open_workspace": "Open Workspace",
   "del_step_success": "Step deleted successfully",
   "del_step_failed": "Failed to delete step",
@@ -219,5 +220,13 @@
   "about_app_description": "A simple and efficient automated web scraping tool.",
   "stage_large_int_to_str": "Convert large numbers to strings",
   "stage_percent_to_float": "Convert percentages to float",
-  "stage_comma_int_to_int": "Remove thousand separators"
+  "stage_comma_int_to_int": "Remove thousand separators",
+  "reset_system": "Reset System",
+  "reset_success": "Successfully reset: ",
+  "reset_failed": "Reset failed: ",
+  "reset_confirm": "Are you sure you want to reset the selected files? This action cannot be undone, and the program may need a restart or tab refresh to apply changes.",
+  "select_all": "Select All",
+  "deselect_all": "Deselect All",
+  "reset_now": "Reset Now",
+  "locales_dir": "Locales Directory (locales)"
 }

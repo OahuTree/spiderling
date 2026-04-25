@@ -10,6 +10,98 @@ class FileService:
     """
     统一的文件操作服务类，负责 JSON, Excel, INI 等文件的读取和保存。
     """
+    APP_NAME = "oahutree_spiderling"
+
+    @staticmethod
+    def get_app_home():
+        """获取用户目录下的应用主目录"""
+        return os.path.expanduser(os.path.join("~", FileService.APP_NAME))
+
+    @staticmethod
+    def get_config_dir():
+        """获取配置目录"""
+        return os.path.join(FileService.get_app_home(), "config")
+
+    @staticmethod
+    def initialize_app_data():
+        """
+        初始化应用数据。如果系统主目录下没有对应目录，则创建并从包内资源拷贝初始配置。
+        """
+        import shutil
+        app_home = FileService.get_app_home()
+        config_dir = FileService.get_config_dir()
+        locales_dir = os.path.join(config_dir, "locales")
+        cache_dir = os.path.join(app_home, ".cache")
+        db_dir = os.path.join(app_home, ".sqlitedb")
+
+        # 创建目录结构
+        for d in [app_home, config_dir, locales_dir, cache_dir, db_dir]:
+            os.makedirs(d, exist_ok=True)
+
+        # 需要拷贝的基础文件（相对于当前运行目录）
+        base_files = [
+            "settings.ini", "db_config.json", "languages.json", "browser_config.json",
+            "menu.json", "fields.json", "actions.json", "ignore_type.json",
+            "source_type.json", "stage_type.json"
+        ]
+        for f in base_files:
+            src = os.path.join("config", f)
+            dst = os.path.join(config_dir, f)
+            if os.path.exists(src) and not os.path.exists(dst):
+                shutil.copy2(src, dst)
+
+        # 拷贝 locales
+        src_locales = os.path.join("config", "locales")
+        if os.path.exists(src_locales):
+            for f in os.listdir(src_locales):
+                if f.endswith(".json"):
+                    src_f = os.path.join(src_locales, f)
+                    dst_f = os.path.join(locales_dir, f)
+                    if not os.path.exists(dst_f):
+                        shutil.copy2(src_f, dst_f)
+
+    @staticmethod
+    def get_resetable_files():
+        """获取允许重置的文件列表"""
+        return [
+            "settings.ini", "languages.json", "browser_config.json",
+            "menu.json", "fields.json", "actions.json", "ignore_type.json",
+            "source_type.json", "stage_type.json"
+        ]
+
+    @staticmethod
+    def reset_file(file_name):
+        """
+        重置单个配置文件。
+        """
+        import shutil
+        src = os.path.join("config", file_name)
+        dst = os.path.join(FileService.get_config_dir(), file_name)
+        if os.path.exists(src):
+            shutil.copy2(src, dst)
+            return True
+        return False
+
+    @staticmethod
+    def reset_locales():
+        """
+        重置 locales 目录下的所有语言文件。
+        """
+        import shutil
+        src_locales = os.path.join("config", "locales")
+        dst_locales = os.path.join(FileService.get_config_dir(), "locales")
+        if os.path.exists(src_locales):
+            os.makedirs(dst_locales, exist_ok=True)
+            for f in os.listdir(src_locales):
+                if f.endswith(".json"):
+                    shutil.copy2(os.path.join(src_locales, f), os.path.join(dst_locales, f))
+            return True
+        return False
+
+    @staticmethod
+    def get_config_path(file_name):
+        """获取配置文件的完整路径（在用户目录下）"""
+        return os.path.join(FileService.get_config_dir(), file_name)
 
     @staticmethod
     def load_json(file_path, default_data=None):
@@ -398,31 +490,20 @@ class FileService:
         """
         读取 browser_config.json 文件中定义的 user_data_dir 值。
         """
-        config_file = "config/browser_config.json"
+        config_file = FileService.get_config_path("browser_config.json")
         config = FileService.load_json(config_file)
-        return config.get("user_data_dir", "")
+        # 默认返回家目录应用文件夹下的 chrome_profile
+        user_data_dir = config.get("user_data_dir", "chrome_profile")
+        if not os.path.isabs(user_data_dir):
+            user_data_dir = os.path.join(FileService.get_app_home(), user_data_dir)
+        return user_data_dir
 
     @staticmethod
-    def get_db_conn_string(config_file=None):
+    def get_db_conn_string():
         """
         自动读取数据库配置文件并生成当前选中的连接字符串。
-        如果未指定 config_file，则根据 config/db_path_config.json 获取。
         """
-        if config_file is None:
-            # 尝试获取自定义目录
-            path_config_file = "config/db_path_config.json"
-            if os.path.exists(path_config_file):
-                try:
-                    with open(path_config_file, "r", encoding="utf-8") as f:
-                        path_config = json.load(f)
-                    config_dir = path_config.get("config_dir", "config")
-                    # 同样增加扩展家目录的处理，确保抓取逻辑也能找到文件
-                    expanded_dir = os.path.expanduser(config_dir)
-                    config_file = os.path.join(expanded_dir, "db_config.json")
-                except:
-                    config_file = "config/db_config.json"
-            else:
-                config_file = "config/db_config.json"
+        config_file = FileService.get_config_path("db_config.json")
 
         config = FileService.load_json(config_file)
         if not config or "databases" not in config:
@@ -452,6 +533,9 @@ class FileService:
         """
         conn_str = ""
         if db_type == "SQLite":
+            # 如果是相对路径，则相对于 APP_HOME
+            if not os.path.isabs(os.path.expanduser(db_name)):
+                db_name = os.path.join(FileService.get_app_home(), db_name)
             full_path = os.path.expanduser(db_name)
             conn_str = f"sqlite:///{full_path}"
         elif db_type == "MySQL":

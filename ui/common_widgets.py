@@ -25,21 +25,21 @@ class NoWheelComboBox(QComboBox):
 
 class StepDialog(QDialog):
     """
-    步聚详情编辑对话框。
+    步骤详情编辑对话框。
     根据配置动态生成输入控件，并支持根据动作类型隐藏/显示相关字段。
     """
 
     def __init__(self, parent, fields, t, initial_data=None, lang="zh"):
         super().__init__(parent)
         self.setWindowTitle(t("step_detail"))
-        self.fields = fields
-        self.t = t
-        self.lang = lang
-        self.inputs = {}
-        self.field_rows = {}  # 存储 key -> (label, widget) 用于显隐控制
-        self.actions_config = {}  # 存储动作与字段的对应关系
+        self.fields = fields  # 字段配置列表
+        self.t = t            # 语言翻译函数
+        self.lang = lang      # 当前语言标识
+        self.inputs = {}      # 存储每个字段对应的输入控件
+        self.field_rows = {}  # 存储 key -> (label, widget, row_idx) 用于动态显隐控制
+        self.actions_config = {}  # 存储不同 Scraping 动作与所需字段的映射关系
 
-        # 字体初始化
+        # 界面显示默认字体初始化
         font_settings = UIService.get_font_settings()
         self.base_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("font_size", 12))
         self.setFont(self.base_font)
@@ -48,33 +48,32 @@ class StepDialog(QDialog):
 
     def setup_ui(self, initial_data):
         """
-        构建对话框界面。
+        构建对话框的 UI 布局结构。
         """
-        self.resize(700, 700)  # 稍微减小初始高度
+        self.resize(700, 700)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(20, 20, 20, 20)
 
-        # 滚动区域支持长表单
+        # 引入滚动区域以处理超长表单内容
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QScrollArea.NoFrame)
         scroll_content = QWidget()
 
-        # 使用 QVBoxLayout 作为容器，内部放 FormLayout 和 Stretch
-        # 这样可以确保 FormLayout 始终置顶，不会因为窗口拉大而导致行间距变大
+        # 表单主体布局，使用 Stretch 确保内容靠顶展示
         content_layout = QVBoxLayout(scroll_content)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
 
         form_layout = QFormLayout()
         self.form_layout = form_layout
-        form_layout.setSpacing(12)  # 稍微减小间距
+        form_layout.setSpacing(12)
         form_layout.setLabelAlignment(Qt.AlignRight)
 
         content_layout.addLayout(form_layout)
-        content_layout.addStretch()  # 关键：将所有内容推向顶部
+        content_layout.addStretch()
 
-        # 遍历字段生成控件
+        # 核心逻辑：遍历字段定义并生成对应的 Label 和 Widget
         for i, field in enumerate(self.fields):
             key = field.get("key")
             label_text = self._get_label_text(field)
@@ -82,23 +81,22 @@ class StepDialog(QDialog):
             label = QLabel(label_text + ":")
             label.setFont(self.base_font)
 
+            # 调用工厂方法创建输入组件
             widget = self._create_input_widget(field, initial_data, i if initial_data else None)
 
             form_layout.addRow(label, widget)
             self.inputs[key] = widget
-            # 记录行索引，用于控制显隐
             self.field_rows[key] = (label, widget, i)
 
         scroll.setWidget(scroll_content)
         layout.addWidget(scroll)
 
-        # 初始显隐控制
+        # 逻辑：如果是动作页签，根据所选动作初始隐藏不相关的字段
         if "action" in self.inputs:
-            # 使用 currentData 获取动作的 key 而非显示文字
             action_key = self.inputs["action"].currentData()
             self.update_fields_visibility(action_key)
 
-        # 底部按钮
+        # 构建底部确定/取消按钮
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         font_settings = UIService.get_font_settings()
         btn_font = QFont(font_settings.get("font_family", "Sans Serif"), font_settings.get("btn_font_size", 14))
@@ -111,7 +109,7 @@ class StepDialog(QDialog):
 
     def _get_label_text(self, field):
         """
-        从字段配置中获取国际化标签文本。
+        解析并获取字段的显示名称（支持 i18n 翻译）。
         """
         key = field.get("key")
         i18n_key = field.get("i18n_key")
@@ -126,7 +124,7 @@ class StepDialog(QDialog):
                 label_text = label_obj or key
 
         if field.get("required"):
-            label_text += " *"
+            label_text += " *" # 必填项增加星号标识
         return label_text
 
     def _create_input_widget(self, field, initial_data, index):
@@ -224,7 +222,7 @@ class StepDialog(QDialog):
         if not source:
             return
 
-        source_path = os.path.join("config", source)
+        source_path = FileService.get_config_path(source)
         source_data = FileService.load_json(source_path)
 
         # 处理不同格式的数据源
@@ -577,6 +575,12 @@ class JsonTable(BaseDataTable):
 
         self._setup_headers()
         self.load_data()
+        
+        # 优化列宽显示
+        if self.columnCount() > 1:
+            self.setColumnWidth(0, 180) # Key 列拉长一点
+        
+        self.horizontalHeader().setStretchLastSection(True) # Value 列（最后一列）拉长到对齐界面
 
     def _setup_headers(self):
         """

@@ -1,7 +1,7 @@
 {
   "log_center": "日誌中心",
   "menu_file": "檔案",
-  "menu_edit": "編輯",
+  "menu_edit": "系統",
   "menu_db": "資料庫",
   "menu_scrape": "抓取",
   "menu_help": "幫助",
@@ -164,7 +164,8 @@
   "disable_drag": "禁止滑鼠拖動",
   "menu_language": "語言",
   "lang_changed_tip": "語言已切換。",
-  "edit_chrome_params": "編輯Chrome參數",
+  "edit_chrome_params": "設置Chrome參數",
+  "set_workspace_dir": "設置工作目錄",
   "edit_action_items": "編輯動作項",
   "copy_row": "拷貝行",
   "paste_row": "粘貼行",
@@ -211,7 +212,7 @@
   "about_app_version": "版本: ",
   "loading_default_config": "正在載入預設配置",
   "excel_loaded_success": "成功載入 Excel，Sheet 數量",
-  "status_ready": "就緒 - 功能表欄包含：檔案、編輯、資料庫、幫助",
+  "status_ready": "就緒 - 功能表欄包含：檔案、系統、資料庫、幫助",
   "open_workspace": "打開工作台",
   "del_step_success": "成功刪除步驟",
   "del_step_failed": "刪除步驟失敗",
@@ -220,5 +221,13 @@
   "about_app_description": "一款簡單、高效的自動化網頁內容採集工具。",
   "stage_large_int_to_str": "轉換大數字列轉換為字串",
   "stage_percent_to_float": "將百分數轉換為浮點數",
-  "stage_comma_int_to_int": "取消千分位"
+  "stage_comma_int_to_int": "取消千分位",
+  "reset_system": "重置系統",
+  "reset_success": "成功重置: ",
+  "reset_failed": "重置失敗: ",
+  "reset_confirm": "您確定要重置所選檔案嗎？此操作不可撤銷，且重置後程序需重啟或重新整理標籤頁以生效。",
+  "select_all": "全選",
+  "deselect_all": "全不選",
+  "reset_now": "立即重置",
+  "locales_dir": "多語言目錄 (locales)"
 }

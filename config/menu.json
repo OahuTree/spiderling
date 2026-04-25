@@ -9,18 +9,19 @@
       ]
     },
     {
-      "label": "编辑",
-      "i18n_key": "menu_edit",
-      "items": [
-        { "id": "edit_chrome", "label": "编辑Chrome参数", "i18n_key": "edit_chrome_params", "component": "JsonEditor" }
-      ]
-    },
-    {
       "label": "数据库",
       "i18n_key": "menu_db",
       "items": [
         { "id": "db_config", "label": "数据库配置", "i18n_key": "db_config", "component": "Settings" },
         { "id": "db_view", "label": "查看数据", "i18n_key": "view_data", "component": "DataView" }
+      ]
+    },
+    {
+      "label": "系统",
+      "i18n_key": "menu_edit",
+      "items": [
+        { "id": "edit_chrome", "label": "设置Chrome参数", "i18n_key": "edit_chrome_params", "component": "JsonEditor" },
+        { "id": "reset_system", "label": "重置系统", "i18n_key": "reset_system", "component": "ResetSystem" }
       ]
     },
     {

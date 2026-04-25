@@ -37,13 +37,7 @@ class ScraperActions:
 
     def _get_cache_path(self):
         """获取缓存目录"""
-        _chrome_option_path = FileService.get_browser_user_data_dir()
-        if not _chrome_option_path:
-            _msg = f"Path not found: {_chrome_option_path}. Please check your config."
-            self.log(_msg, "red")
-            raise RuntimeError(_msg)
-
-        _cache_path = os.path.expanduser(_chrome_option_path) + "/.cache"
+        _cache_path = os.path.join(FileService.get_app_home(), ".cache")
         # 如果不存在缓存目录则创建一个
         if not os.path.exists(_cache_path):
             os.makedirs(_cache_path)

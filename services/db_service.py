@@ -11,34 +11,9 @@ class DBService:
     @staticmethod
     def get_config_path():
         """
-        获取数据库配置文件的完整路径。
-        读取 config/db_path_config.json 中的目录设置，默认为 config。
-        支持 '~' 符号（用户家目录）。
+        获取数据库配置文件的完整路径（在用户目录下）。
         """
-        path_config = DBService.load_path_config()
-        config_dir = path_config.get("config_dir", "config")
-        if not config_dir:
-            config_dir = "config"
-
-        # 自动处理 ~ 符号，将其扩展为用户家目录
-        expanded_dir = os.path.expanduser(config_dir)
-        return os.path.join(expanded_dir, "db_config.json")
-
-    @staticmethod
-    def load_path_config():
-        """
-        加载记录数据库配置目录的文件。
-        """
-        path_config_file = os.path.join("config", "db_path_config.json")
-        return FileService.load_json(path_config_file, default_data={"config_dir": "config"})
-
-    @staticmethod
-    def save_path_config(config_dir):
-        """
-        保存数据库配置所在的目录。
-        """
-        path_config_file = os.path.join("config", "db_path_config.json")
-        FileService.save_json(path_config_file, {"config_dir": config_dir})
+        return FileService.get_config_path("db_config.json")
 
     @staticmethod
     def load_config():
@@ -116,8 +91,7 @@ class DBService:
         try:
             if not conn_string:
                 conn_string = FileService.get_db_conn_string()
-            if not conn_string:
-                return []
+            if not conn_string: return []
 
             engine = create_engine(conn_string)
             inspector = inspect(engine)

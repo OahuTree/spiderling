@@ -218,5 +218,13 @@
   "about_app_description": "簡便かつ強力な自動情報収集器。",
   "stage_large_int_to_str": "長大な数値を文字列へ変換",
   "stage_percent_to_float": "百分率を浮動小数点へ変換",
-  "stage_comma_int_to_int": "桁区切りを除去"
+  "stage_comma_int_to_int": "桁区切りを除去",
+  "reset_system": "制度初期化",
+  "reset_success": "正常に初期化いたしました: ",
+  "reset_failed": "初期化に失敗いたしました: ",
+  "reset_confirm": "選択された構成設定を初期状態へ戻してもよろしいでしょうか。この操作は取り消せません。変更を適用するには再起動が必要となります。",
+  "select_all": "すべて選択",
+  "deselect_all": "すべて選択解除",
+  "reset_now": "直ちに初期化",
+  "locales_dir": "多言語目録 (locales)"
 }

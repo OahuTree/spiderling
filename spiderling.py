@@ -49,11 +49,14 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
 
+        # 初始化应用数据目录（mac/win/linux 用户主目录下）
+        FileService.initialize_app_data()
+
         # 加载语言配置
         self.languages = self.load_languages()
 
         # 从配置文件加载上次保存的语言，默认 zh-CN
-        self.settings_path = os.path.join("config", "settings.ini")
+        self.settings_path = FileService.get_config_path("settings.ini")
         settings = FileService.load_ini(self.settings_path)
         self.current_lang = settings.get("General", {}).get("language", "zh-CN")
 
@@ -141,12 +144,12 @@ class MainWindow(QMainWindow):
 
     def load_languages(self):
         """加载支持的语言列表"""
-        path = os.path.join("config", "languages.json")
+        path = FileService.get_config_path("languages.json")
         return FileService.load_json(path, default_data=[{"code": "zh", "label": "中文"}])
 
     def load_i18n(self, lang):
         """加载指定语言的国际化配置"""
-        path = os.path.join("config", "locales", f"{lang}.json")
+        path = os.path.join(FileService.get_config_dir(), "locales", f"{lang}.json")
         return FileService.load_json(path, default_data={})
 
     def t(self, key):
@@ -171,7 +174,7 @@ class MainWindow(QMainWindow):
         Returns:
             dict: 包含菜单层级结构的字典。如果文件不存在，返回包含空菜单的默认字典。
         """
-        config_path = os.path.join("config", "menu.json")
+        config_path = FileService.get_config_path("menu.json")
         return FileService.load_json(config_path, default_data={"menu": []})
 
     def setup_ui(self):
@@ -386,6 +389,9 @@ class MainWindow(QMainWindow):
             elif component_name == "JsonEditor":
                 from ui import json_editor_view
                 json_editor_view.create_json_editor(parent, layout, self.t, log_func=self.add_log)
+            elif component_name == "ResetSystem":
+                from ui import reset_system_view
+                reset_system_view.create_reset_system(parent, layout, self.t)
             else:
                 layout.addWidget(QLabel(f"{self.t('unknown_component')}: {component_name}"))
         except ImportError as ie:

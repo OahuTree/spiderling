@@ -1,7 +1,7 @@
 {
   "log_center": "操作ログ",
   "menu_file": "ファイル",
-  "menu_edit": "編集",
+  "menu_edit": "システム",
   "menu_db": "データベース",
   "menu_scrape": "スクレイピング",
   "menu_help": "ヘルプ",
@@ -163,7 +163,8 @@
   "disable_drag": "ドラッグを無効化",
   "menu_language": "言語",
   "lang_changed_tip": "言語が変更されました。",
-  "edit_chrome_params": "Chromeパラメータの編集",
+  "edit_chrome_params": "Chromeパラメータの設定",
+  "set_workspace_dir": "作業ディレクトリの設定",
   "edit_action_items": "アクション項目の編集",
   "copy_row": "行をコピー",
   "paste_row": "行を貼り付け",
@@ -210,7 +211,7 @@
   "about_app_version": "バージョン: ",
   "loading_default_config": "デフォルト設定を読み込んでいます",
   "excel_loaded_success": "Excelの読み込みに成功しました。シート数",
-  "status_ready": "準備完了 - メニュー：ファイル、編集、データベース、ヘルプ",
+  "status_ready": "準備完了 - メニュー：ファイル、システム、データベース、ヘルプ",
   "open_workspace": "ワークスペースを開く",
   "del_step_success": "ステップを正常に削除しました",
   "del_step_failed": "ステップの削除に失敗しました",
@@ -219,5 +220,13 @@
   "about_app_description": "シンプルで効率的な自動化ウェブスクレイピングツール。",
   "stage_large_int_to_str": "大きな数値列を文字列に変換",
   "stage_percent_to_float": "パーセントを浮動小数点に変換",
-  "stage_comma_int_to_int": "桁区切り(カンマ)を削除"
+  "stage_comma_int_to_int": "桁区切り(カンマ)を削除",
+  "reset_system": "システムリセット",
+  "reset_success": "正常にリセットされました: ",
+  "reset_failed": "リセットに失敗しました: ",
+  "reset_confirm": "選択したファイルをリセットしてもよろしいですか？この操作は取り消せません。リセットを反映するにはプログラムの再起動またはタブの更新が必要です。",
+  "select_all": "すべて選択",
+  "deselect_all": "すべて選択解除",
+  "reset_now": "今すぐリセット",
+  "locales_dir": "多言語ディレクトリ (locales)"
 }
