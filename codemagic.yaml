@@ -18,9 +18,11 @@ workflows:
         script: |
           brew install python@3.10
           python --version
-          brew install binutils
+
       - name: Install dependencies
         script: |
+          brew install binutils
+          
           pip install \
                   PyQt5 \
                   SQLAlchemy \
