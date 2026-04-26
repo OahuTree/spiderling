@@ -42,8 +42,8 @@ workflows:
           echo "__version__ = '$VERSION'" > services/version_info.py
       - name: Build Mac Intel Executable
         script: |
-          export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
-          export MACOSX_DEPLOYMENT_TARGET=10.15
+          # export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
+          # export MACOSX_DEPLOYMENT_TARGET=10.15
           pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
           --target-architecture universal2 \
           --add-data "config:config" \
