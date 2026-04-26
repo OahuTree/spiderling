@@ -46,8 +46,8 @@ workflows:
         script: |
           # export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
           # export MACOSX_DEPLOYMENT_TARGET=10.15
-          pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
-          --target-architecture universal2 \
+          arch -x86_64 pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
+          --target-architecture x86_64  \
           --add-data "config:config" \
           --add-data "assets:assets" \
           --collect-all psycopg2 \
