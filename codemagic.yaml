@@ -18,6 +18,7 @@ workflows:
         script: |
           brew install python@3.10
           python --version
+          brew install binutils
       - name: Install dependencies
         script: |
           pip install \
@@ -41,6 +42,7 @@ workflows:
           echo "__version__ = '$VERSION'" > services/version_info.py
       - name: Build Mac Intel Executable
         script: |
+          export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
           export MACOSX_DEPLOYMENT_TARGET=10.15
           pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
           --target-architecture universal2 \
@@ -48,6 +50,7 @@ workflows:
           --add-data "assets:assets" \
           --collect-all psycopg2 \
           --collect-all pymssql \
+          --collect-all cryptography \
           --hidden-import="psycopg2" \
           --hidden-import="pymssql" \
           --hidden-import="selenium" \
