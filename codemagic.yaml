@@ -20,8 +20,6 @@ workflows:
           python --version
       - name: Install dependencies
         script: |
-#          pip install pyinstaller -r requirements.txt
-#          pip install pyinstaller
           pip install \
                   PyQt5 \
                   SQLAlchemy \
