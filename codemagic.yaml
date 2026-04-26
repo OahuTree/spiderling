@@ -16,14 +16,18 @@ workflows:
     scripts:
       - name: Setup Python
         script: |
-          brew install python@3.10
+          arch -x86_64 brew install python@3.10
+          arch -x86_64 python3 -m venv venv
+          source venv/bin/activate
+
+          # brew install python@3.10
           python --version
 
       - name: Install dependencies
         script: |
-          brew install binutils
+          # brew install binutils
           
-          pip install \
+          arch -x86_64 pip install \
                   PyQt5 \
                   SQLAlchemy \
                   pandas \
