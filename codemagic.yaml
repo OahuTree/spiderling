@@ -1,6 +1,7 @@
 workflows:
-  spiderling-macos:
-    name: Spiderling macOS Build
+  intel-linux-build:
+    name: Spiderling Intel Mac
+    # 这里定义运行环境，Codemagic 默认支持多任务
     instance_type: mac_mini_m2
 
     environment:
@@ -11,27 +12,26 @@ workflows:
       events:
         - tag
       tag_patterns:
-        - pattern: "v*"
-
+        - pattern: 'v*'
     scripts:
-      - name: Setup Python
+      - name: Install dependencies
         script: |
-          brew install python@3.10
-          python3.10 -m pip install --upgrade pip
-
-      - name: Install deps
+          pip install pyinstaller -r requirements.txt
+      - name: Inject Version
         script: |
-          python3.10 -m pip install -r requirements.txt
-          python3.10 -m pip install pyinstaller
-
-      - name: Build
+          VERSION=${CM_TAG:-"manual"}
+          echo "__version__ = '$VERSION'" > services/version_info.py
+      - name: Build Mac Intel Executable
         script: |
-          python3.10 -m PyInstaller \
-            --windowed \
-            --onedir \
-            --name Spiderling \
-            --target-architecture universal2 \
-            spiderling.py
-
+          export MACOSX_DEPLOYMENT_TARGET=10.15
+          pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
+          --target-architecture universal2 \
+          --add-data "config:config" --add-data "assets:assets" \
+          --hidden-import="psycopg2" --hidden-import="pymssql" \
+          --hidden-import="selenium" --hidden-import="webdriver-manager" \
+          --hidden-import="selenium.webdriver.chrome.webdriver" spiderling.py
+          
+          brew install create-dmg
+          create-dmg --volname "Spiderling-$VERSION" --window-size 600 400 --icon-size 100 --icon "spiderling.app" 175 120 --app-drop-link 425 120 "spiderling-macos-x86_64-$VERSION.dmg" "dist/spiderling.app"
     artifacts:
-      - dist/**/*
+      - "*.dmg"
