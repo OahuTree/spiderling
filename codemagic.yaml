@@ -1,10 +1,11 @@
 workflows:
-  spiderling-macos-universal:
-    name: Spiderling macOS Universal Build (2026)
+  spiderling-macos:
+    name: Spiderling macOS Build
     instance_type: mac_mini_m2
 
     environment:
-      python: 3.10
+      vars:
+        PYTHON_VERSION: 3.10
 
     triggering:
       events:
@@ -13,96 +14,28 @@ workflows:
         - pattern: "v*"
 
     scripts:
-
-      - name: Show system info
+      - name: Setup Python
         script: |
-          sw_vers
-          python3 --version
-          uname -m
+          brew install python@3.10
+          python3.10 -m pip install --upgrade pip
 
-      - name: Create virtualenv
+      - name: Install deps
         script: |
-          python3 -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip setuptools wheel
+          python3.10 -m pip install -r requirements.txt
+          python3.10 -m pip install pyinstaller
 
-      - name: Install Python packages
+      - name: Build
         script: |
-          source venv/bin/activate
-          pip install \
-            PyQt5 \
-            SQLAlchemy \
-            pandas \
-            numpy \
-            beautifulsoup4 \
-            selenium \
-            webdriver-manager \
-            openpyxl \
-            pymysql \
-            pymssql \
-            psycopg2-binary \
-            cryptography \
-            lxml \
-            pyinstaller
-
-      - name: Inject version
-        script: |
-          VERSION=${CM_TAG:-manual}
-          mkdir -p services
-          echo "__version__ = '$VERSION'" > services/version_info.py
-
-      - name: Build Spiderling.app
-        script: |
-          source venv/bin/activate
-          export MACOSX_DEPLOYMENT_TARGET=10.15
-
-          pyinstaller \
-            --noconfirm \
-            --clean \
+          python3.10 -m PyInstaller \
             --windowed \
             --onedir \
             --name Spiderling \
-            --icon assets/logo.icns \
             --target-architecture universal2 \
-            --add-data "config:config" \
-            --add-data "assets:assets" \
-            --hidden-import sqlalchemy \
-            --hidden-import pandas \
-            --hidden-import numpy \
-            --hidden-import bs4 \
-            --hidden-import lxml \
-            --hidden-import pymysql \
-            --hidden-import pymssql \
-            --hidden-import psycopg2 \
-            --hidden-import cryptography \
-            --hidden-import selenium \
-            --hidden-import webdriver_manager \
             spiderling.py
 
-      - name: Verify binary arch
-        script: |
-          file dist/Spiderling/Spiderling || true
-
-      - name: Create DMG
-        script: |
-          brew install create-dmg || true
-
-          VERSION=${CM_TAG:-manual}
-
-          create-dmg \
-            --volname "Spiderling-$VERSION" \
-            --window-size 620 420 \
-            --icon-size 100 \
-            --icon "Spiderling.app" 170 190 \
-            --app-drop-link 450 190 \
-            "Spiderling-macos-universal-$VERSION.dmg" \
-            "dist/Spiderling.app"
-
     artifacts:
-      - Spiderling-macos-universal-*.dmg
       - dist/**/*
-      - build/**/*
-
     publishing:
-      github:
-        artifact_type: release
+      scripts:
+        - name: Publish Release
+          script: echo "publish here"
