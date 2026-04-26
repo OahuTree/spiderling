@@ -16,10 +16,10 @@ jobs:
             # 修改路径匹配模式，让它更稳健
             artifact_name: "spiderling-windows"
             path_to_upload: "dist/*.zip"
-          - os: macos-13
-            platform: macos-x86_64
-            artifact_name: "spiderling-macos-x86_64"
-            path_to_upload: "dist/*.dmg"
+#          - os: macos-13
+#            platform: macos-x86_64
+#            artifact_name: "spiderling-macos-x86_64"
+#            path_to_upload: "dist/*.dmg"
           - os: macos-latest
             platform: macos-arm64
             artifact_name: "spiderling-macos-arm64"
