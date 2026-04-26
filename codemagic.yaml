@@ -1,7 +1,7 @@
 workflows:
   intel-mac-build:
     name: Spiderling Mac Intel Build
-    instance_type: mac_mini_intel # 关键：使用 Intel 芯片实例
+    instance_type: mac_mini_intel
     triggering:
       events:
         - tag
@@ -9,14 +9,15 @@ workflows:
         - pattern: 'v*'
     scripts:
       - name: Install dependencies
-        script: pip install pyinstaller -r requirements.txt
+        script: |
+          pip install pyinstaller
+          pip install -r requirements.txt
       - name: Inject Version
         script: |
           VERSION=${CM_TAG:-"manual"}
           echo "__version__ = '$VERSION'" > services/version_info.py
       - name: Build and Package
         script: |
-          # 提高兼容性，支持你的 macOS 12.x
           export MACOSX_DEPLOYMENT_TARGET=10.15
           pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
           --add-data "config:config" --add-data "assets:assets" \
@@ -25,7 +26,7 @@ workflows:
           --hidden-import="selenium.webdriver.chrome.webdriver" spiderling.py
           
           brew install create-dmg
-          create-dmg --volname "Spiderling-$VERSION" --window-size 600 400 --icon-size 100 --icon "spiderling.app" 175 120 --app-drop-link 425 120 "spiderling-macos-x86_64-$VERSION.dmg" "dist/spiderling.app"
+          create-dmg --volname "Spiderling-$CM_TAG" --window-size 600 400 --icon-size 100 --icon "spiderling.app" 175 120 --app-drop-link 425 120 "spiderling-macos-x86_64-$CM_TAG.dmg" "dist/spiderling.app"
     artifacts:
       - "*.dmg"
     publishing:
