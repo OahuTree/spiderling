@@ -1,34 +1,108 @@
 workflows:
-  intel-mac-build:
-    name: Spiderling Mac Intel Build
-    instance_type: mac_mini_intel
+  spiderling-macos-universal:
+    name: Spiderling macOS Universal Build (2026)
+    instance_type: mac_mini_m2
+
+    environment:
+      python: 3.11
+
     triggering:
       events:
         - tag
       tag_patterns:
-        - pattern: 'v*'
+        - pattern: "v*"
+
     scripts:
-      - name: Install dependencies
+
+      - name: Show system info
         script: |
-          pip install pyinstaller
-          pip install -r requirements.txt
-      - name: Inject Version
+          sw_vers
+          python3 --version
+          uname -m
+
+      - name: Create virtualenv
         script: |
-          VERSION=${CM_TAG:-"manual"}
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip setuptools wheel
+
+      - name: Install Python packages
+        script: |
+          source venv/bin/activate
+          pip install \
+            PyQt5 \
+            SQLAlchemy \
+            pandas \
+            numpy \
+            beautifulsoup4 \
+            selenium \
+            webdriver-manager \
+            openpyxl \
+            pymysql \
+            pymssql \
+            psycopg2-binary \
+            cryptography \
+            lxml \
+            pyinstaller
+
+      - name: Inject version
+        script: |
+          VERSION=${CM_TAG:-manual}
+          mkdir -p services
           echo "__version__ = '$VERSION'" > services/version_info.py
-      - name: Build and Package
+
+      - name: Build Spiderling.app
         script: |
+          source venv/bin/activate
           export MACOSX_DEPLOYMENT_TARGET=10.15
-          pyinstaller --windowed --onedir --noconfirm --icon="assets/logo.icns" \
-          --add-data "config:config" --add-data "assets:assets" \
-          --hidden-import="psycopg2" --hidden-import="pymssql" \
-          --hidden-import="selenium" --hidden-import="webdriver-manager" \
-          --hidden-import="selenium.webdriver.chrome.webdriver" spiderling.py
-          
-          brew install create-dmg
-          create-dmg --volname "Spiderling-$CM_TAG" --window-size 600 400 --icon-size 100 --icon "spiderling.app" 175 120 --app-drop-link 425 120 "spiderling-macos-x86_64-$CM_TAG.dmg" "dist/spiderling.app"
+
+          pyinstaller \
+            --noconfirm \
+            --clean \
+            --windowed \
+            --onedir \
+            --name Spiderling \
+            --icon assets/logo.icns \
+            --target-architecture universal2 \
+            --add-data "config:config" \
+            --add-data "assets:assets" \
+            --hidden-import sqlalchemy \
+            --hidden-import pandas \
+            --hidden-import numpy \
+            --hidden-import bs4 \
+            --hidden-import lxml \
+            --hidden-import pymysql \
+            --hidden-import pymssql \
+            --hidden-import psycopg2 \
+            --hidden-import cryptography \
+            --hidden-import selenium \
+            --hidden-import webdriver_manager \
+            spiderling.py
+
+      - name: Verify binary arch
+        script: |
+          file dist/Spiderling/Spiderling || true
+
+      - name: Create DMG
+        script: |
+          brew install create-dmg || true
+
+          VERSION=${CM_TAG:-manual}
+
+          create-dmg \
+            --volname "Spiderling-$VERSION" \
+            --window-size 620 420 \
+            --icon-size 100 \
+            --icon "Spiderling.app" 170 190 \
+            --app-drop-link 450 190 \
+            "Spiderling-macos-universal-$VERSION.dmg" \
+            "dist/Spiderling.app"
+
     artifacts:
-      - "*.dmg"
+      - Spiderling-macos-universal-*.dmg
+      - dist/**/*
+      - build/**/*
+
     publishing:
       github:
         artifact_type: release
