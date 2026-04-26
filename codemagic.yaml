@@ -35,7 +35,3 @@ workflows:
 
     artifacts:
       - dist/**/*
-    publishing:
-      scripts:
-        - name: Publish Release
-          script: echo "publish here"
