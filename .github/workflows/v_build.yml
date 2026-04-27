@@ -56,6 +56,12 @@ jobs:
           # 下面这一条是用来在 GitHub Actions 的运行日志里打印出来给你看的
           echo "Successfully injected version $VERSION into services/version_info.py"
 
+      - name: Debug - Check Version File
+        shell: bash
+        run: |
+          ls -R services/  # 查看 services 文件夹下是否有文件
+          cat services/version_info.py || echo "File not found!"
+
       - name: Build on Windows
         if: matrix.platform == 'windows'
         run: |
