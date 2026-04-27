@@ -50,7 +50,7 @@ class UIService:
     def get_version(cls):
         try:
             # 尝试导入由 GitHub Actions 动态生成的版本文件
-            from version_info import __version__
+            from services.version_info import __version__
         except ImportError:
             # 如果本地没有这个文件（开发阶段），则显示一个默认值
             __version__ = " dev-beta"
