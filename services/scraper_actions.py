@@ -128,7 +128,7 @@ class ScraperActions:
 
             FileService.write_cache(config_path=self.cache_path, file_name=_variable, data=_val, delete_existing=True)
             self.log(f"{self.t('scrape_result')}: {_val}")
-            # 这里后续可以扩展存储逻辑
+
         else:
             self.log(self.t("err_no_selector"), "red")
 
@@ -259,7 +259,9 @@ class ScraperActions:
             # 2. 如果指定了 stage_type，则调用 DataStageService 进行转换
             if _stage_key:
                 from services.data_stage_service import DataStageService
+                print(_df)
                 _df = DataStageService.transform(_df, _stage_key)
+                print(_df)
                 self.log(f"{self.t('applied_transform')}: {_stage_key}")
 
             # 3. 如果指定了输出变量，则保存结果

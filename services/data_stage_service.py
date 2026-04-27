@@ -17,22 +17,22 @@ class DataStageService:
         if df is None or df.empty or not stage_key:
             return df
 
-        # 获取当前文件所在目录的上一级，然后进入 config
-        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        config_path = os.path.join(base_dir, "config", "stage_type.json")
-        
+        # 使用 FileService 的方法获取路径，确保跨平台一致性
+        config_path = FileService.get_config_path("stage_type.json")
+
         rules_data = FileService.load_json(config_path, default_data={"stage": []})
         rules = rules_data.get("stage", [])
 
         # 查找匹配的规则
         rule = next((r for r in rules if r.get("key") == stage_key), None)
+
         if not rule:
             # 如果没找到规则，直接返回原数据
             return df
 
         pattern = rule.get("pattern")
         action = rule.get("action")
-
+        print(f"transform :pattern {pattern}  {action}")
         if not pattern or not action:
             return df
 
